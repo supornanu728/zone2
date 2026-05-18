@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #C8102E;
-    --red-dark: #9e0c24;
+    --blue: #004B87;
+    --blue-dark: #003660;
     --gold: #F0A500;
     --gold-light: #ffc62b;
     --gold-pale: #fff8e7;
@@ -20,22 +20,15 @@
     --gray-700: #444;
     --gray-900: #1a1a1a;
     --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
-    --shadow-md: 0 6px 24px rgba(0,0,0,0.10);
     --radius: 14px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Sarabun', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
 
-  header { background: var(--red); overflow: hidden; position: relative; }
+  header { background: var(--blue); overflow: hidden; position: relative; }
   header::after { content: ''; position: absolute; top: -30px; right: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.06); }
   .header-inner { max-width: 1100px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
-  .back-btn {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,0.15); border: none; color: white;
-    padding: 8px 16px; border-radius: 8px; cursor: pointer;
-    font-family: 'Sarabun', sans-serif; font-size: 0.88rem;
-    text-decoration: none; transition: background 0.2s;
-  }
+  .back-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.88rem; text-decoration: none; transition: background 0.2s; }
   .back-btn:hover { background: rgba(255,255,255,0.25); }
   .header-text { flex: 1; }
   .header-text h1 { font-family: 'Noto Serif Thai', serif; font-size: 1.4rem; font-weight: 700; color: white; }
@@ -44,135 +37,45 @@
 
   main { max-width: 1100px; margin: 0 auto; padding: 32px 32px 60px; }
 
-  /* Toolbar */
-  .toolbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .search-box {
-    flex: 1; min-width: 200px;
-    position: relative;
-  }
-  .search-box input {
-    width: 100%;
-    padding: 10px 16px 10px 42px;
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    font-family: 'Sarabun', sans-serif;
-    font-size: 0.92rem;
-    background: var(--white);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-box input:focus { border-color: var(--red); }
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .search-box { flex: 1; min-width: 200px; position: relative; }
+  .search-box input { width: 100%; padding: 10px 16px 10px 42px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-family: 'Sarabun', sans-serif; font-size: 0.92rem; background: var(--white); outline: none; transition: border-color 0.2s; }
+  .search-box input:focus { border-color: var(--blue); }
   .search-box .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--gray-400); }
-  .info-badge {
-    background: var(--white);
-    border: 1.5px solid var(--gray-200);
-    padding: 8px 16px;
-    border-radius: var(--radius);
-    font-size: 0.83rem;
-    color: var(--gray-400);
-    white-space: nowrap;
-  }
-  .info-badge span { color: var(--red); font-weight: 700; }
-  .refresh-btn {
-    background: var(--white); border: 1.5px solid var(--gray-200);
-    padding: 9px 14px; border-radius: var(--radius);
-    cursor: pointer; font-size: 1rem; transition: all 0.2s;
-    color: var(--gray-700);
-  }
-  .refresh-btn:hover { border-color: var(--red); color: var(--red); }
+  .info-badge { background: var(--white); border: 1.5px solid var(--gray-200); padding: 8px 16px; border-radius: var(--radius); font-size: 0.83rem; color: var(--gray-400); white-space: nowrap; }
+  .info-badge span { color: var(--blue); font-weight: 700; }
+  .refresh-btn { background: var(--white); border: 1.5px solid var(--gray-200); padding: 9px 14px; border-radius: var(--radius); cursor: pointer; font-size: 1rem; transition: all 0.2s; color: var(--gray-700); }
+  .refresh-btn:hover { border-color: var(--blue); color: var(--blue); }
 
-  /* Table container */
-  .table-wrap {
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    border: 1.5px solid var(--gray-200);
-    overflow: hidden;
-  }
-  .table-head-bar {
-    background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
-    padding: 14px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .table-wrap { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1.5px solid var(--gray-200); overflow: hidden; }
+  .table-head-bar { background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
   .table-head-bar h2 { font-family: 'Noto Serif Thai', serif; font-size: 0.95rem; font-weight: 700; color: white; }
   .table-head-bar .updated { font-size: 0.78rem; color: rgba(255,255,255,0.65); }
 
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  thead th {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    font-weight: 700;
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 2px solid var(--gray-200);
-    white-space: nowrap;
-    font-size: 0.82rem;
-    letter-spacing: 0.02em;
-  }
+  thead th { background: var(--gray-100); color: var(--gray-700); font-weight: 700; padding: 12px 16px; text-align: left; border-bottom: 2px solid var(--gray-200); white-space: nowrap; font-size: 0.82rem; letter-spacing: 0.02em; }
   tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
-  tbody tr:hover { background: #fff5f5; }
+  tbody tr:hover { background: #eef4fb; }
   tbody tr:last-child { border-bottom: none; }
   td { padding: 12px 16px; color: var(--gray-700); }
   td:first-child { font-weight: 600; color: var(--gray-900); }
 
-  /* Loading / empty */
-  .state-box {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--gray-400);
-  }
+  .state-box { text-align: center; padding: 60px 24px; color: var(--gray-400); }
   .state-box .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
   .state-box p { font-size: 0.9rem; }
-  .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid var(--gray-200);
-    border-top-color: var(--red);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto 14px;
-  }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Error */
-  .error-box {
-    background: #fff5f5;
-    border: 1.5px solid #fcc;
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    display: flex; align-items: flex-start; gap: 12px;
-    margin-bottom: 20px;
-  }
+  .error-box { background: #f0f5fb; border: 1.5px solid #a0bcd8; border-radius: var(--radius); padding: 20px 24px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
   .error-box .icon { font-size: 1.4rem; flex-shrink: 0; }
-  .error-box p { font-size: 0.88rem; color: var(--red); line-height: 1.55; }
+  .error-box p { font-size: 0.88rem; color: var(--blue); line-height: 1.55; }
 
-  /* Config notice */
-  .config-notice {
-    background: var(--gold-pale);
-    border: 1.5px solid var(--gold);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    font-size: 0.83rem;
-    color: #7a5200;
-    margin-bottom: 20px;
-    display: flex; align-items: flex-start; gap: 10px;
-  }
-  .config-notice code {
-    background: rgba(0,0,0,0.07);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.85em;
-  }
+  .config-notice { background: var(--gold-pale); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 16px 20px; font-size: 0.83rem; color: #7a5200; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; }
+  .config-notice code { background: rgba(0,0,0,0.07); padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
 
   footer { text-align: center; padding: 24px; font-size: 0.8rem; color: var(--gray-400); border-top: 1px solid var(--gray-200); background: var(--white); }
-  footer span { color: var(--red); font-weight: 600; }
+  footer span { color: var(--blue); font-weight: 600; }
 
   @media (max-width: 640px) {
     main { padding: 20px 12px 40px; }
@@ -184,9 +87,9 @@
 
 <header>
   <div class="header-inner">
-    <a class="back-btn" href="index.html">← กลับ</a>
+    <a class="back-btn" href="index.html">&#8592; กลับ</a>
     <div class="header-text">
-      <h1>💰 ค่าคอม</h1>
+      <h1>&#128176; ค่าคอม</h1>
       <p>อัตราค่าคอมมิชชั่นมาตรฐาน</p>
     </div>
   </div>
@@ -195,29 +98,28 @@
 
 <main>
 
-  <!-- Config notice (remove after setting GAS_URL) -->
   <div class="config-notice" id="configNotice">
-    ⚙️ <div>กรุณาแทนที่ <code>YOUR_GAS_WEB_APP_URL</code> ในไฟล์ JS ด้วย URL ของ Google Apps Script ที่ Deploy แล้ว และระบุ <code>sheetName</code> ให้ตรงกับ Tab ใน Spreadsheet</div>
+    <div>กรุณาแทนที่ <code>YOUR_GAS_WEB_APP_URL</code> ในไฟล์ JS ด้วย URL ของ Google Apps Script ที่ Deploy แล้ว และระบุ <code>sheetName</code> ให้ตรงกับ Tab ใน Spreadsheet</div>
   </div>
 
   <div class="toolbar">
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon">&#128269;</span>
       <input type="text" id="searchInput" placeholder="ค้นหาข้อมูล..." oninput="filterTable()">
     </div>
     <div class="info-badge">ทั้งหมด <span id="rowCount">-</span> รายการ</div>
-    <button class="refresh-btn" onclick="loadData()" title="รีเฟรชข้อมูล">🔄</button>
+    <button class="refresh-btn" onclick="loadData()" title="รีเฟรชข้อมูล">&#128260;</button>
   </div>
 
   <div id="errorBox" class="error-box" style="display:none">
-    <span class="icon">⚠️</span>
+    <span class="icon">&#9888;&#65039;</span>
     <p id="errorMsg"></p>
   </div>
 
   <div class="table-wrap">
     <div class="table-head-bar">
       <h2>ตารางค่าคอม</h2>
-      <span class="updated" id="updatedAt">—</span>
+      <span class="updated" id="updatedAt">&#8212;</span>
     </div>
     <div class="table-scroll">
       <div id="tableContainer">
@@ -236,31 +138,27 @@
 </footer>
 
 <script>
-// ══════════════════════════════════════════════
-//  ⚙️  ตั้งค่าที่นี่
-// ══════════════════════════════════════════════
-const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';   // ← ใส่ URL ของ GAS Web App
-const SHEET_NAME = 'commission';              // ← ชื่อ Tab ใน Spreadsheet
-// ══════════════════════════════════════════════
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
+const SHEET_NAME = 'commission';
 
 let allRows = [];
 let headers = [];
 
 async function loadData() {
-  document.getElementById('tableContainer').innerHTML = `
-    <div class="state-box"><div class="spinner"></div><p>กำลังโหลดข้อมูล...</p></div>`;
+  document.getElementById('tableContainer').innerHTML =
+    '<div class="state-box"><div class="spinner"></div><p>กำลังโหลดข้อมูล...</p></div>';
   document.getElementById('errorBox').style.display = 'none';
   document.getElementById('rowCount').textContent = '-';
 
   try {
-    const res  = await fetch(`${GAS_URL}?sheet=${encodeURIComponent(SHEET_NAME)}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const res  = await fetch(GAS_URL + '?sheet=' + encodeURIComponent(SHEET_NAME));
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
 
     if (data.error) throw new Error(data.error);
     if (!data.rows || data.rows.length === 0) {
-      document.getElementById('tableContainer').innerHTML = `
-        <div class="state-box"><span class="icon">📭</span><p>ไม่พบข้อมูลใน Sheet นี้</p></div>`;
+      document.getElementById('tableContainer').innerHTML =
+        '<div class="state-box"><span class="icon">&#128237;</span><p>ไม่พบข้อมูลใน Sheet นี้</p></div>';
       return;
     }
 
@@ -272,27 +170,27 @@ async function loadData() {
   } catch (e) {
     document.getElementById('errorBox').style.display = 'flex';
     document.getElementById('errorMsg').textContent =
-      `โหลดข้อมูลไม่สำเร็จ: ${e.message} — กรุณาตรวจสอบ GAS_URL และ SHEET_NAME`;
-    document.getElementById('tableContainer').innerHTML = `
-      <div class="state-box"><span class="icon">⚠️</span><p>ไม่สามารถโหลดข้อมูลได้</p></div>`;
+      'โหลดข้อมูลไม่สำเร็จ: ' + e.message + ' — กรุณาตรวจสอบ GAS_URL และ SHEET_NAME';
+    document.getElementById('tableContainer').innerHTML =
+      '<div class="state-box"><span class="icon">&#9888;&#65039;</span><p>ไม่สามารถโหลดข้อมูลได้</p></div>';
   }
 }
 
 function renderTable(rows) {
   if (rows.length === 0) {
     document.getElementById('tableContainer').innerHTML =
-      `<div class="state-box"><span class="icon">🔍</span><p>ไม่พบข้อมูลที่ค้นหา</p></div>`;
+      '<div class="state-box"><span class="icon">&#128269;</span><p>ไม่พบข้อมูลที่ค้นหา</p></div>';
     document.getElementById('rowCount').textContent = '0';
     return;
   }
 
-  let html = '<table><thead><tr>';
-  headers.forEach(h => { html += `<th>${h}</th>`; });
+  var html = '<table><thead><tr>';
+  headers.forEach(function(h) { html += '<th>' + h + '</th>'; });
   html += '</tr></thead><tbody>';
 
-  rows.forEach(row => {
+  rows.forEach(function(row) {
     html += '<tr>';
-    headers.forEach(h => { html += `<td>${row[h] ?? ''}</td>`; });
+    headers.forEach(function(h) { html += '<td>' + (row[h] != null ? row[h] : '') + '</td>'; });
     html += '</tr>';
   });
 
@@ -302,11 +200,13 @@ function renderTable(rows) {
 }
 
 function filterTable() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
+  var q = document.getElementById('searchInput').value.toLowerCase();
   if (!q) { renderTable(allRows); return; }
-  const filtered = allRows.filter(row =>
-    headers.some(h => String(row[h] ?? '').toLowerCase().includes(q))
-  );
+  var filtered = allRows.filter(function(row) {
+    return headers.some(function(h) {
+      return String(row[h] != null ? row[h] : '').toLowerCase().indexOf(q) !== -1;
+    });
+  });
   renderTable(filtered);
 }
 
