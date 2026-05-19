@@ -81,6 +81,7 @@ main{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
 .ctags{display:flex;gap:5px;flex-wrap:wrap}
 .ctag{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(13,59,140,.10);color:var(--blue);letter-spacing:.02em}
 .ctag.cat{background:rgba(13,59,140,.18)}
+.ctag.has-link{background:rgba(240,165,0,.18);color:#7a5200}
 
 .card-body{padding:13px 18px;flex:1}
 .preview{font-size:.82rem;color:var(--g600);line-height:1.62;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
@@ -97,7 +98,7 @@ main{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
 .spinner{width:36px;height:36px;border:3px solid var(--g200);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── NOTICE / ERROR ── */
+/* ── ERROR ── */
 .err{background:#fff5f5;border:1.5px solid #fcc;border-radius:var(--r);padding:16px 20px;display:flex;align-items:flex-start;gap:10px;margin-bottom:20px}
 .err p{font-size:.86rem;color:#c0392b;line-height:1.5}
 .err details{font-size:.78rem;color:#c0392b;margin-top:6px;cursor:pointer}
@@ -106,7 +107,7 @@ main{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
 .overlay{display:none;position:fixed;inset:0;background:rgba(8,20,55,.58);z-index:999;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(3px)}
 .overlay.open{display:flex}
 
-.modal{background:var(--white);border-radius:var(--r);width:100%;max-width:660px;max-height:93vh;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(13,59,140,.25);animation:mIn .22s ease}
+.modal{background:var(--white);border-radius:var(--r);width:100%;max-width:680px;max-height:93vh;display:flex;flex-direction:column;box-shadow:0 28px 72px rgba(13,59,140,.25);animation:mIn .22s ease}
 @keyframes mIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 
 .mhead{background:var(--blue);padding:18px 20px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:flex-start;gap:14px;flex-shrink:0}
@@ -118,9 +119,22 @@ main{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
 .mclose{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.05rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .18s;line-height:1}
 .mclose:hover{background:rgba(255,255,255,.32)}
 
+/* ── modal image banner ── */
+.mimg-wrap{width:100%;overflow:hidden;flex-shrink:0;background:var(--g100);max-height:220px}
+.mimg-wrap img{width:100%;height:220px;object-fit:cover;display:block}
+
 .mbody{padding:20px 22px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
 .mlabel{font-size:.79rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
 .mdesc{font-size:.84rem;color:var(--g600);line-height:1.58;background:var(--blue-pale);border-radius:var(--r-sm);padding:10px 14px}
+
+/* ── link box ── */
+.link-box{display:flex;align-items:center;gap:8px;background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--r-sm);padding:9px 13px}
+.link-ico{font-size:1.05rem;flex-shrink:0}
+.link-anchor{font-size:.82rem;color:var(--blue-lite);word-break:break-all;flex:1;text-decoration:none;line-height:1.4}
+.link-anchor:hover{text-decoration:underline}
+.copy-link-btn{flex-shrink:0;background:var(--white);border:1.5px solid var(--g200);border-radius:6px;padding:5px 12px;font-size:.76rem;font-family:'Sarabun',sans-serif;font-weight:600;color:var(--g700);cursor:pointer;transition:all .18s;white-space:nowrap}
+.copy-link-btn:hover{border-color:var(--blue-lite);color:var(--blue)}
+.copy-link-btn.ok{background:var(--blue);color:#fff;border-color:var(--blue)}
 
 textarea.prompt-ta{width:100%;min-height:190px;padding:13px 15px;border:1.5px solid var(--g200);border-radius:var(--r-sm);font-family:'Sarabun',sans-serif;font-size:.90rem;line-height:1.68;color:var(--g900);resize:vertical;outline:none;transition:border-color .2s;background:var(--g50)}
 textarea.prompt-ta:focus{border-color:var(--blue-lite);background:#fff}
@@ -146,6 +160,8 @@ footer b{color:var(--blue)}
   .mfoot{justify-content:stretch}
   .btn-copy,.btn-reset{flex:1;justify-content:center}
   .modal{max-height:96vh}
+  .link-box{flex-wrap:wrap}
+  .link-anchor{width:100%}
 }
 @media(max-width:380px){
   .htext h1{font-size:1.15rem}
@@ -197,6 +213,8 @@ footer b{color:var(--blue)}
 <!-- MODAL -->
 <div class="overlay" id="overlay" onclick="bgClose(event)">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+
+    <!-- header -->
     <div class="mhead">
       <div class="mthumb-ico" id="mthumb">🤖</div>
       <div class="mtitle-wrap">
@@ -205,17 +223,39 @@ footer b{color:var(--blue)}
       </div>
       <button class="mclose" onclick="closeModal()" aria-label="ปิด">✕</button>
     </div>
+
+    <!-- banner image (แสดงเมื่อมีรูปภาพ) -->
+    <div class="mimg-wrap" id="mimgWrap" style="display:none">
+      <img id="mimg" src="" alt="">
+    </div>
+
     <div class="mbody">
+
+      <!-- คำอธิบาย -->
       <div id="descWrap" style="display:none">
         <div class="mlabel">📌 คำอธิบาย</div>
         <div class="mdesc" id="mdesc"></div>
       </div>
+
+      <!-- ลิงก์ประกอบ (คอลัมน์ "ลิงก์" ใน Sheet) -->
+      <div id="linkWrap" style="display:none">
+        <div class="mlabel">🔗 ลิงก์ประกอบ</div>
+        <div class="link-box">
+          <span class="link-ico">📎</span>
+          <a class="link-anchor" id="linkAnchor" href="#" target="_blank" rel="noopener">—</a>
+          <button class="copy-link-btn" id="copyLinkBtn" onclick="copyLink()">คัดลอกลิงก์</button>
+        </div>
+      </div>
+
+      <!-- Prompt -->
       <div>
         <div class="mlabel">✏️ Prompt — แก้ไขได้ก่อนคัดลอก</div>
         <textarea class="prompt-ta" id="ta" rows="8"></textarea>
         <div class="mhint" style="margin-top:6px">💡 แก้ข้อความในกล่องได้เลย เช่น ใส่ชื่อลูกค้า วันที่ หรือจำนวนเงิน</div>
       </div>
+
     </div>
+
     <div class="mfoot">
       <button class="btn-reset" onclick="resetPrompt()">↺ รีเซ็ต</button>
       <button class="btn-copy" id="copyBtn" onclick="copyPrompt()">📋 คัดลอก Prompt</button>
@@ -230,20 +270,70 @@ footer b{color:var(--blue)}
 //  ⚙️  ตั้งค่า
 // ══════════════════════════════════════════════════
 const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
-const SHEET_NAME = 'prompts';   // ← ต้องมีใน SHEET_MAP ของ GAS ด้วย
+const SHEET_NAME = 'prompts';
 
-// ชื่อคอลัมน์ใน Sheet (ต้องตรงกับ Header แถวที่ 1)
+// ชื่อคอลัมน์ใน Sheet — ต้องตรงกับ Header แถวที่ 1 พอดี
 const C = {
   title  : 'ชื่อ Prompt',
   cat    : 'หมวดหมู่',
   desc   : 'คำอธิบาย',
   prompt : 'Prompt',
-  img    : 'รูปภาพ',
+  img    : 'รูปภาพ',   // ลิงก์ Drive → แปลงอัตโนมัติ
+  link   : 'ลิงก์',   // ลิงก์ประกอบ (Drive / เว็บ / YouTube ฯลฯ)
   tags   : 'แท็ก',
 };
 // ══════════════════════════════════════════════════
 
 let all = [], activeCat = 'ทั้งหมด', origPrompt = '', curIdx = -1;
+let currentLink = '';
+
+// ══════════════════════════════════════════════════
+//  🔄  แปลง Google Drive URL → direct image URL
+//  รองรับรูปแบบ:
+//   • https://drive.google.com/file/d/FILE_ID/view?...
+//   • https://drive.google.com/open?id=FILE_ID
+//   • https://drive.google.com/uc?id=FILE_ID
+//   • https://lh3.googleusercontent.com/...  (ใช้ได้เลย)
+//   • URL อื่นๆ (ไม่ใช่ Drive) → ส่งคืนเหมือนเดิม
+// ══════════════════════════════════════════════════
+function toDriveImg(url) {
+  if (!url) return '';
+  const s = String(url).trim();
+  if (!s) return '';
+
+  // lh3 thumbnail — ใช้ได้โดยตรง
+  if (s.includes('lh3.googleusercontent.com')) return s;
+
+  // ไม่ใช่ Google Drive เลย — ใช้ URL ตรงๆ
+  if (!s.includes('drive.google.com') && !s.includes('docs.google.com')) return s;
+
+  // ดึง FILE_ID
+  let id = '';
+  let m = s.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) { id = m[1]; }
+  if (!id) {
+    m = s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (m) id = m[1];
+  }
+
+  return id ? `https://drive.google.com/uc?export=view&id=${id}` : s;
+}
+
+// แปลง Drive URL → ลิงก์เปิดดู (สำหรับ <a href>)
+function toDriveView(url) {
+  if (!url) return '#';
+  const s = String(url).trim();
+
+  if (!s.includes('drive.google.com') && !s.includes('docs.google.com')) return s;
+
+  let m = s.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/view`;
+
+  m = s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/file/d/${m[1]}/view`;
+
+  return s;
+}
 
 // ── โหลดข้อมูลจาก GAS ───────────────────────────
 async function loadData() {
@@ -255,29 +345,22 @@ async function loadData() {
 
   try {
     const res = await fetch(url, { cache: 'no-store' });
-
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
 
-    // GAS อาจส่ง Content-Type เป็น text/plain แต่ body เป็น JSON
     const text = await res.text();
     let data;
-    try {
-      data = JSON.parse(text);
-    } catch(parseErr) {
+    try { data = JSON.parse(text); }
+    catch(parseErr) {
       throw new Error(`JSON parse ล้มเหลว: ${parseErr.message}\nResponse: ${text.slice(0,200)}`);
     }
 
     if (data.error) throw new Error(
-      `GAS ตอบกลับ error: "${data.error}"\n` +
-      `→ ตรวจสอบว่า SHEET_MAP ใน GAS มี key "prompts" แล้ว`
+      `GAS ตอบกลับ error: "${data.error}"\n→ ตรวจสอบว่า SHEET_MAP ใน GAS มี key "prompts" แล้ว`
     );
 
-    // GAS ส่งกลับเป็น { headers: [...], rows: [...], total: N }
     const rows = Array.isArray(data) ? data : (data.rows || data.data || []);
-
     if (!rows.length) throw new Error(
-      'Sheet "prompts" ไม่มีข้อมูล (rows = 0)\n' +
-      '→ ตรวจสอบว่า Tab ชื่อ "prompts" ใน Spreadsheet มีข้อมูลและ Header ถูกต้อง'
+      'Sheet "prompts" ไม่มีข้อมูล (rows = 0)\n→ ตรวจสอบว่า Tab ชื่อ "prompts" มีข้อมูลและ Header ถูกต้อง'
     );
 
     all = rows;
@@ -286,30 +369,21 @@ async function loadData() {
 
   } catch(e) {
     showError(e);
-    // ไม่ fallback ไป sample อีกต่อไป — แสดง error ชัดเจนแทน
     document.getElementById('container').innerHTML =
       '<div class="state"><span class="ico">❌</span><p>ไม่สามารถโหลดข้อมูลได้<br>ดูรายละเอียดด้านบน</p></div>';
   }
 }
 
 function showError(e) {
-  const box  = document.getElementById('errBox');
-  const msg  = document.getElementById('errMsg');
-  const stk  = document.getElementById('errStack');
-  const det  = document.getElementById('errDetail');
-
+  const box = document.getElementById('errBox');
+  const msg = document.getElementById('errMsg');
+  const stk = document.getElementById('errStack');
+  const det = document.getElementById('errDetail');
   box.style.display = 'flex';
-
-  const mainMsg = e.message || String(e);
-  // แยก main message กับ stack
-  const parts = mainMsg.split('\n');
+  const parts = (e.message || String(e)).split('\n');
   msg.textContent = parts[0];
-  if (parts.length > 1) {
-    stk.textContent = parts.slice(1).join('\n');
-    det.style.display = 'block';
-  } else {
-    det.style.display = 'none';
-  }
+  if (parts.length > 1) { stk.textContent = parts.slice(1).join('\n'); det.style.display = 'block'; }
+  else det.style.display = 'none';
 }
 
 // ── Build category tabs ──────────────────────────
@@ -359,13 +433,19 @@ function render(items) {
     const cat     = esc(p[C.cat]    || '');
     const preview = esc(p[C.prompt] || '(ไม่มีข้อความ)');
     const tags    = (p[C.tags]||'').split(',').map(t=>t.trim()).filter(Boolean);
-    const img     = p[C.img] || '';
+    const imgRaw  = String(p[C.img]  || '').trim();
+    const imgUrl  = toDriveImg(imgRaw);
+    const hasLink = !!String(p[C.link] || '').trim();
 
-    const thumbHtml = img
-      ? `<img class="thumb" src="${esc(img)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
+    const thumbHtml = imgUrl
+      ? `<img class="thumb" src="${esc(imgUrl)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
       : `<div class="thumb-ico">🤖</div>`;
 
-    const tagsHtml = tags.map(t => `<span class="ctag">${esc(t)}</span>`).join('');
+    const tagsHtml = [
+      cat ? `<span class="ctag cat">${esc(cat)}</span>` : '',
+      ...tags.map(t => `<span class="ctag">${esc(t)}</span>`),
+      hasLink ? `<span class="ctag has-link">🔗 มีลิงก์</span>` : '',
+    ].join('');
 
     return `
 <div class="card" onclick="openModal(${realIdx})" role="button" tabindex="0"
@@ -374,10 +454,7 @@ function render(items) {
     ${thumbHtml}
     <div class="cmeta">
       <div class="ctitle">${title}</div>
-      <div class="ctags">
-        ${cat ? `<span class="ctag cat">${esc(cat)}</span>` : ''}
-        ${tagsHtml}
-      </div>
+      <div class="ctags">${tagsHtml}</div>
     </div>
   </div>
   <div class="card-body">
@@ -405,31 +482,65 @@ function esc(s) {
 function openModal(idx) {
   const p = all[idx];
   if (!p) return;
-  curIdx = idx;
+  curIdx     = idx;
   origPrompt = p[C.prompt] || '';
 
-  const img   = p[C.img]   || '';
-  const title = p[C.title] || 'Prompt';
-  const cat   = p[C.cat]   || '';
-  const desc  = p[C.desc]  || '';
+  const imgRaw  = String(p[C.img]  || '').trim();
+  const linkRaw = String(p[C.link] || '').trim();
+  const imgUrl  = toDriveImg(imgRaw);
+  const title   = p[C.title] || 'Prompt';
+  const cat     = p[C.cat]   || '';
+  const desc    = p[C.desc]  || '';
 
+  // ── thumbnail icon ──
   const th = document.getElementById('mthumb');
-  if (img) {
-    th.outerHTML = `<img class="mthumb" id="mthumb" src="${esc(img)}" alt="${esc(title)}" onerror="this.style.display='none'">`;
+  if (imgUrl) {
+    if (th.tagName !== 'IMG') {
+      th.outerHTML = `<img class="mthumb" id="mthumb" src="${esc(imgUrl)}" alt="${esc(title)}" onerror="this.style.display='none'">`;
+    } else { th.src = imgUrl; th.style.display = ''; }
   } else {
     if (th.tagName === 'IMG') {
       th.outerHTML = `<div class="mthumb-ico" id="mthumb">🤖</div>`;
-    } else {
-      th.textContent = '🤖';
-    }
+    } else { th.textContent = '🤖'; }
   }
+
   document.getElementById('mtitle').textContent = title;
   document.getElementById('msub').textContent   = cat;
 
-  const dw = document.getElementById('descWrap');
-  if (desc) { document.getElementById('mdesc').textContent = desc; dw.style.display='block'; }
-  else       { dw.style.display='none'; }
+  // ── banner image ──
+  const mimgWrap = document.getElementById('mimgWrap');
+  const mimg     = document.getElementById('mimg');
+  if (imgUrl) {
+    mimg.src      = imgUrl;
+    mimg.alt      = title;
+    mimg.onerror  = () => { mimgWrap.style.display = 'none'; };
+    mimgWrap.style.display = 'block';
+  } else {
+    mimgWrap.style.display = 'none';
+  }
 
+  // ── คำอธิบาย ──
+  const dw = document.getElementById('descWrap');
+  if (desc) { document.getElementById('mdesc').textContent = desc; dw.style.display = 'block'; }
+  else       { dw.style.display = 'none'; }
+
+  // ── ลิงก์ประกอบ ──
+  const lw = document.getElementById('linkWrap');
+  if (linkRaw) {
+    currentLink = linkRaw;
+    const viewUrl  = toDriveView(linkRaw);
+    const anchor   = document.getElementById('linkAnchor');
+    anchor.href        = viewUrl;
+    anchor.textContent = linkRaw.length > 65 ? linkRaw.slice(0, 62) + '…' : linkRaw;
+    anchor.title       = linkRaw;
+    lw.style.display   = 'block';
+    resetCopyLinkBtn();
+  } else {
+    currentLink      = '';
+    lw.style.display = 'none';
+  }
+
+  // ── prompt ──
   document.getElementById('ta').value = origPrompt;
   resetCopyBtn();
 
@@ -458,11 +569,10 @@ function resetCopyBtn() {
 async function copyPrompt() {
   const text = document.getElementById('ta').value;
   const btn  = document.getElementById('copyBtn');
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
+  try { await navigator.clipboard.writeText(text); }
+  catch {
     const ta = document.getElementById('ta');
-    ta.select(); ta.setSelectionRange(0,99999);
+    ta.select(); ta.setSelectionRange(0, 99999);
     document.execCommand('copy');
   }
   btn.textContent = '✅ คัดลอกแล้ว!';
@@ -470,7 +580,30 @@ async function copyPrompt() {
   setTimeout(resetCopyBtn, 2800);
 }
 
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+function resetCopyLinkBtn() {
+  const b = document.getElementById('copyLinkBtn');
+  b.textContent = 'คัดลอกลิงก์';
+  b.classList.remove('ok');
+}
+
+async function copyLink() {
+  if (!currentLink) return;
+  const btn = document.getElementById('copyLinkBtn');
+  try { await navigator.clipboard.writeText(currentLink); }
+  catch {
+    const ta = document.createElement('textarea');
+    ta.value = currentLink;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  btn.textContent = '✅ คัดลอกแล้ว';
+  btn.classList.add('ok');
+  setTimeout(resetCopyLinkBtn, 2500);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 loadData();
 </script>
