@@ -3,145 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบข้อมูลค่าตอบแทน | ไทยประกันชีวิต</title>
+<title>ระบบข้อมูลค่าตอบแทน | กลุ่มการตลาดโซน 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #C8102E;
-    --red-dark: #9e0c24;
-    --red-light: #e8112f;
+    --blue: #004B87;
+    --blue-dark: #003660;
+    --blue-light: #0063b1;
     --gold: #F0A500;
     --gold-light: #ffc62b;
     --gold-pale: #fff8e7;
     --white: #ffffff;
-    --gray-50: #fafafa;
-    --gray-100: #f4f4f4;
-    --gray-200: #e8e8e8;
-    --gray-400: #999;
-    --gray-700: #444;
-    --gray-900: #1a1a1a;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
-    --shadow-md: 0 6px 24px rgba(0,0,0,0.10);
-    --shadow-lg: 0 16px 48px rgba(0,0,0,0.13);
-    --radius: 14px;
+    --gray-50: #f7f9fc;
+    --gray-100: #f0f4f8;
+    --gray-200: #e0e8f0;
+    --gray-400: #8fa0b0;
+    --gray-700: #445566;
+    --gray-900: #1a2535;
+    --shadow-sm: 0 2px 8px rgba(0,50,100,0.07);
+    --shadow-md: 0 6px 24px rgba(0,50,100,0.10);
+    --shadow-lg: 0 16px 48px rgba(0,50,100,0.15);
+    --radius: 16px;
     --radius-sm: 8px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
 
-  body {
-    font-family: 'Sarabun', sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    min-height: 100vh;
-  }
-
-  /* ─── HEADER ─────────────────────────────────── */
+  /* ── HEADER ── */
   header {
-    background: var(--red);
-    position: relative;
-    overflow: hidden;
-    padding: 0;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+    position: relative; overflow: hidden;
   }
-  header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -80px;
-    width: 320px; height: 320px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: 30%;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(240,165,0,0.12);
-  }
+  header::before { content: ''; position: absolute; top: -60px; right: -80px; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events:none; }
+  header::after  { content: ''; position: absolute; bottom: -40px; left: 30%; width: 200px; height: 200px; border-radius: 50%; background: rgba(240,165,0,0.10); pointer-events:none; }
   .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 28px 32px 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-    z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 24px 28px 20px;
+    display: flex; align-items: center; gap: 18px;
+    position: relative; z-index: 1;
   }
   .logo-box {
-    width: 56px; height: 56px;
-    background: var(--white);
-    border-radius: 12px;
+    width: 52px; height: 52px;
+    background: var(--white); border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    font-size: 1.6rem;
   }
-  .logo-box svg { width: 36px; height: 36px; }
-  .header-text h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.55rem;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.2;
-  }
-  .header-text p {
-    font-size: 0.88rem;
-    color: rgba(255,255,255,0.75);
-    margin-top: 3px;
-    font-weight: 300;
-    letter-spacing: 0.02em;
-  }
-  .gold-bar {
-    height: 4px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
-  }
+  .header-text h1 { font-family: 'Noto Serif Thai', serif; font-size: 1.45rem; font-weight: 700; color: var(--white); line-height: 1.2; }
+  .header-text p  { font-size: 0.83rem; color: rgba(255,255,255,0.7); margin-top: 3px; }
+  .gold-bar { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
 
-  /* ─── BREADCRUMB / GREETING ───────────────────── */
-  .top-bar {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-200);
-    padding: 10px 32px;
-  }
-  .top-bar-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.83rem;
-    color: var(--gray-400);
-  }
-  .top-bar-inner span { font-weight: 500; color: var(--red); }
+  /* ── TOPBAR ── */
+  .top-bar { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 9px 28px; }
+  .top-bar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 0.80rem; color: var(--gray-400); }
+  .live-dot { display: inline-block; width: 7px; height: 7px; background: #22c55e; border-radius: 50%; margin-right: 5px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  /* ─── MAIN ────────────────────────────────────── */
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 32px 60px;
-  }
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
   .section-title {
     font-family: 'Noto Serif Thai', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1rem; font-weight: 700;
     color: var(--gray-700);
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--gray-200);
-  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
 
-  /* ─── MENU GRID ───────────────────────────────── */
+  /* ── MENU GRID — unified ── */
   .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 48px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 40px;
   }
 
   .menu-card {
@@ -149,172 +84,127 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
     border: 1.5px solid var(--gray-200);
-    text-decoration: none;
-    color: inherit;
+    text-decoration: none; color: inherit;
     transition: all 0.22s ease;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     position: relative;
   }
-  .menu-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--red);
-  }
-  .menu-card:hover .card-top { background: var(--red); }
+  .menu-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--blue); }
+  .menu-card:hover .card-top { background: var(--blue); }
   .menu-card:hover .card-icon { color: var(--white); }
   .menu-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
 
-  .card-top {
-    background: var(--gray-100);
-    padding: 28px 24px 20px;
-    transition: background 0.22s ease;
+  .card-top { background: var(--gray-100); padding: 26px 22px 18px; transition: background 0.22s ease; position: relative; }
+  .card-icon { font-size: 2rem; color: var(--blue); transition: color 0.22s ease; display: block; margin-bottom: 6px; }
+  .card-badge { position: absolute; top: 12px; right: 12px; background: var(--gold); color: var(--white); font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; letter-spacing: 0.04em; }
+
+  .card-body { padding: 14px 20px 16px; flex: 1; }
+  .card-title { font-family: 'Noto Serif Thai', serif; font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 5px; }
+  .card-desc  { font-size: 0.80rem; color: var(--gray-400); line-height: 1.55; }
+
+  .card-footer { padding: 10px 20px; border-top: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+  .card-tag    { font-size: 0.72rem; color: var(--gray-400); background: var(--gray-100); padding: 2px 8px; border-radius: 20px; }
+  .card-arrow  { font-size: 1rem; color: var(--blue); opacity: 0; transform: translateX(-6px); transition: all 0.22s ease; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .menu-card { animation: fadeUp 0.4s ease both; }
+  .menu-card:nth-child(1){animation-delay:.05s} .menu-card:nth-child(2){animation-delay:.10s}
+  .menu-card:nth-child(3){animation-delay:.15s} .menu-card:nth-child(4){animation-delay:.20s}
+  .menu-card:nth-child(5){animation-delay:.25s}
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 20px; font-size: 0.78rem; color: var(--gray-400); border-top: 1px solid var(--gray-200); background: var(--white); }
+  footer span { color: var(--blue); font-weight: 600; }
+
+  /* ══════════════════════════════════════
+     POPUP OVERLAY
+  ══════════════════════════════════════ */
+  .popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,30,60,0.55);
+    backdrop-filter: blur(4px);
+    z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+  .popup-overlay.hidden { display: none; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .popup-box {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 24px 64px rgba(0,40,80,0.25);
+    max-width: 460px; width: 100%;
+    overflow: hidden;
+    animation: popUp 0.35s cubic-bezier(.34,1.56,.64,1) both;
     position: relative;
   }
-  .card-icon {
-    font-size: 2.2rem;
-    color: var(--red);
-    transition: color 0.22s ease;
-    display: block;
-    margin-bottom: 8px;
-  }
-  .card-badge {
-    position: absolute;
-    top: 14px; right: 14px;
-    background: var(--gold);
-    color: var(--white);
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 20px;
-    letter-spacing: 0.04em;
-  }
-  .card-body {
-    padding: 16px 24px 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-title {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--gray-900);
-    margin-bottom: 6px;
-  }
-  .card-desc {
-    font-size: 0.83rem;
-    color: var(--gray-400);
-    line-height: 1.55;
-    flex: 1;
-  }
-  .card-footer {
-    padding: 12px 24px;
-    border-top: 1px solid var(--gray-100);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-tag {
-    font-size: 0.75rem;
-    color: var(--gray-400);
-    background: var(--gray-100);
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-  .card-arrow {
-    font-size: 1rem;
-    color: var(--red);
-    opacity: 0;
-    transform: translateX(-6px);
-    transition: all 0.22s ease;
-  }
+  @keyframes popUp { from{opacity:0;transform:scale(.88) translateY(20px)} to{opacity:1;transform:none} }
 
-  /* ─── SUB SECTION ─────────────────────────────── */
-  .sub-section {
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    border: 1.5px solid var(--gray-200);
-    margin-bottom: 28px;
-    overflow: hidden;
+  .popup-header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 12px;
   }
-  .sub-header {
-    background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
-    padding: 18px 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .sub-header .icon { font-size: 1.4rem; }
-  .sub-header h2 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--white);
-  }
-  .sub-header p { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
-  .sub-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  .sub-item {
-    padding: 20px 28px;
-    text-decoration: none;
-    color: inherit;
-    border-bottom: 1px solid var(--gray-100);
-    border-right: 1px solid var(--gray-100);
-    transition: background 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .sub-item:last-child, .sub-item:nth-last-child(2) { border-bottom: none; }
-  .sub-item:nth-child(even) { border-right: none; }
-  .sub-item:hover { background: #fff5f5; }
-  .sub-item-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    background: var(--gold-pale);
+  .popup-header-icon { font-size: 1.6rem; }
+  .popup-header h3 { font-family:'Noto Serif Thai',serif; font-size:1.05rem; font-weight:700; color:var(--white); }
+  .popup-header p  { font-size:0.78rem; color:rgba(255,255,255,0.7); margin-top:2px; }
+
+  .popup-close-x {
+    position: absolute; top: 14px; right: 16px;
+    background: rgba(255,255,255,0.2); border: none;
+    color: white; width: 28px; height: 28px;
+    border-radius: 50%; cursor: pointer;
+    font-size: 1rem; line-height: 1;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
+    transition: background 0.2s;
   }
-  .sub-item-text { font-size: 0.93rem; font-weight: 600; color: var(--gray-900); }
-  .sub-item-sub { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
+  .popup-close-x:hover { background: rgba(255,255,255,0.35); }
 
-  /* ─── FOOTER ──────────────────────────────────── */
-  footer {
-    text-align: center;
-    padding: 24px;
-    font-size: 0.8rem;
-    color: var(--gray-400);
-    border-top: 1px solid var(--gray-200);
-    background: var(--white);
+  .popup-gold-bar { height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+
+  .popup-img-wrap { width: 100%; max-height: 220px; overflow: hidden; display: none; }
+  .popup-img-wrap img { width: 100%; height: 220px; object-fit: cover; display: block; }
+
+  .popup-body { padding: 22px 24px; }
+  .popup-body p { font-size: 0.92rem; color: var(--gray-700); line-height: 1.7; white-space: pre-wrap; }
+
+  .popup-footer {
+    padding: 14px 24px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
   }
-  footer span { color: var(--red); font-weight: 600; }
-
-  /* ─── ANIMATIONS ──────────────────────────────── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .popup-no-show {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 0.78rem; color: var(--gray-400); cursor: pointer; user-select: none;
   }
-  .menu-card { animation: fadeUp 0.4s ease both; }
-  .menu-card:nth-child(1) { animation-delay: 0.05s; }
-  .menu-card:nth-child(2) { animation-delay: 0.10s; }
-  .menu-card:nth-child(3) { animation-delay: 0.15s; }
-  .menu-card:nth-child(4) { animation-delay: 0.20s; }
-  .sub-section { animation: fadeUp 0.4s ease 0.25s both; }
+  .popup-no-show input { width: 15px; height: 15px; accent-color: var(--blue); cursor: pointer; }
+  .popup-close-btn {
+    background: var(--blue); color: white;
+    border: none; padding: 10px 28px;
+    border-radius: 10px; cursor: pointer;
+    font-family: 'Sarabun', sans-serif; font-size: 0.92rem; font-weight: 600;
+    transition: background 0.2s;
+  }
+  .popup-close-btn:hover { background: var(--blue-light); }
 
+  /* ── MOBILE ── */
   @media (max-width: 640px) {
-    main { padding: 24px 16px 40px; }
-    .header-inner { padding: 20px 16px; }
-    .menu-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .sub-grid { grid-template-columns: 1fr; }
-    .sub-item:nth-child(even) { border-right: none; }
-    .sub-item { border-right: none !important; }
+    main { padding: 20px 12px 40px; }
+    .header-inner { padding: 16px 14px; }
+    .header-text h1 { font-size: 1.1rem; }
+    .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .card-top { padding: 20px 16px 14px; }
+    .card-icon { font-size: 1.7rem; }
+    .card-title { font-size: 0.9rem; }
+    .card-body { padding: 10px 14px 12px; }
+    .card-footer { padding: 8px 14px; }
+    .top-bar { padding: 8px 14px; }
+  }
+  @media (max-width: 360px) {
+    .menu-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -322,17 +212,10 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo-box">
-      <!-- Thai Life Insurance shield icon -->
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 4L6 10v10c0 9 6.2 16.5 14 18.5C27.8 36.5 34 29 34 20V10L20 4z" fill="#C8102E"/>
-        <path d="M20 8L10 13v8c0 6.6 4.5 12.2 10 13.8C25.5 23.2 30 17.6 30 21v-8L20 8z" fill="#9e0c24"/>
-        <path d="M16 20l3 3 6-6" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+    <div class="logo-box">🛡️</div>
     <div class="header-text">
       <h1>ระบบข้อมูลค่าตอบแทน</h1>
-      <p>บริษัท ไทยประกันชีวิต จำกัด (มหาชน)</p>
+      <p>กลุ่มการตลาดโซน 2 &nbsp;|&nbsp; ไทยประกันชีวิต</p>
     </div>
   </div>
 </header>
@@ -340,14 +223,14 @@
 
 <div class="top-bar">
   <div class="top-bar-inner">
-    <div>🏠 หน้าหลัก &rsaquo; เมนูทั้งหมด</div>
-    <div><span>● Live</span> &nbsp;ข้อมูลอัปเดตจาก Google Sheets</div>
+    <div>🏠 หน้าหลัก</div>
+    <div><span class="live-dot"></span>ข้อมูลอัปเดตจาก Google Sheets</div>
   </div>
 </div>
 
 <main>
 
-  <p class="section-title">เมนูหลัก</p>
+  <p class="section-title">เมนูทั้งหมด</p>
 
   <div class="menu-grid">
 
@@ -380,13 +263,41 @@
       </div>
     </a>
 
+    <a class="menu-card" href="event-unit.html">
+      <div class="card-top">
+        <span class="card-icon">👔</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">ค่าจัดงาน ผู้บริหารหน่วย</div>
+        <div class="card-desc">อัตราค่าจัดงานสำหรับผู้บริหารระดับหน่วย</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag">Unit Event</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="menu-card" href="event-center.html">
+      <div class="card-top">
+        <span class="card-icon">🏢</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">ค่าจัดงาน ศูนย์</div>
+        <div class="card-desc">อัตราค่าจัดงานระดับศูนย์การตลาด</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-tag">Center Event</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
     <a class="menu-card" href="download.html">
       <div class="card-top">
         <span class="card-icon">📥</span>
       </div>
       <div class="card-body">
         <div class="card-title">ดาวน์โหลดเอกสาร</div>
-        <div class="card-desc">แบบฟอร์ม คู่มือ และเอกสารสำหรับตัวแทนประกันชีวิต</div>
+        <div class="card-desc">แบบฟอร์ม คู่มือ และเอกสารสำหรับตัวแทน</div>
       </div>
       <div class="card-footer">
         <span class="card-tag">Documents</span>
@@ -396,40 +307,100 @@
 
   </div>
 
-  <!-- ค่าจัดงาน sub-section -->
-  <p class="section-title">ค่าจัดงาน</p>
-
-  <div class="sub-section">
-    <div class="sub-header">
-      <span class="icon">🏆</span>
-      <div>
-        <h2>ค่าจัดงาน</h2>
-        <p>เลือกประเภทที่ต้องการดูข้อมูล</p>
-      </div>
-    </div>
-    <div class="sub-grid">
-      <a class="sub-item" href="event-unit.html">
-        <div class="sub-item-icon">👔</div>
-        <div>
-          <div class="sub-item-text">ผู้บริหารหน่วย</div>
-          <div class="sub-item-sub">Unit Manager Event</div>
-        </div>
-      </a>
-      <a class="sub-item" href="event-center.html">
-        <div class="sub-item-icon">🏢</div>
-        <div>
-          <div class="sub-item-text">ศูนย์</div>
-          <div class="sub-item-sub">Center Event</div>
-        </div>
-      </a>
-    </div>
-  </div>
-
 </main>
 
 <footer>
-  &copy; 2025 <span>ไทยประกันชีวิต</span> &nbsp;|&nbsp; ระบบข้อมูลค่าตอบแทน &nbsp;|&nbsp; ข้อมูลทั้งหมดเชื่อมต่อจาก Google Sheets
+  &copy; 2025 <span>กลุ่มการตลาดโซน 2</span> &nbsp;|&nbsp; ผอ.ญาณวุฒิ ธรรมมาบุญ &nbsp;|&nbsp; ผลิตโดย นายสุภร อนุสุริยา
 </footer>
+
+<!-- ══ POPUP ══ -->
+<div class="popup-overlay hidden" id="popupOverlay">
+  <div class="popup-box">
+    <div class="popup-header">
+      <span class="popup-header-icon" id="popupIcon">📢</span>
+      <div>
+        <h3 id="popupTitle">ประกาศ</h3>
+        <p id="popupSubtitle">กลุ่มการตลาดโซน 2</p>
+      </div>
+    </div>
+    <button class="popup-close-x" onclick="closePopup()">✕</button>
+    <div class="popup-gold-bar"></div>
+    <div class="popup-img-wrap" id="popupImgWrap">
+      <img id="popupImg" src="" alt="ประกาศ">
+    </div>
+    <div class="popup-body">
+      <p id="popupMsg">กำลังโหลด...</p>
+    </div>
+    <div class="popup-footer">
+      <label class="popup-no-show">
+        <input type="checkbox" id="noShowCheck"> ไม่แสดงอีกวันนี้
+      </label>
+      <button class="popup-close-btn" onclick="closePopup()">รับทราบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIG — แก้ GAS_URL ให้ตรงกับของคุณ
+// ══════════════════════════════════════════════════════
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
+const POPUP_SHEET = 'popup'; // ชื่อ Tab ใน Google Sheets
+
+// ══════════════════════════════════════════════════════
+//  POPUP LOGIC
+// ══════════════════════════════════════════════════════
+async function loadPopup() {
+  // ตรวจว่าผู้ใช้กด "ไม่แสดงอีกวันนี้" หรือเปล่า
+  const today   = new Date().toDateString();
+  const skipped = localStorage.getItem('popup_skip_date');
+  if (skipped === today) return;
+
+  try {
+    const res  = await fetch(GAS_URL + '?sheet=' + encodeURIComponent(POPUP_SHEET));
+    const data = await res.json();
+
+    if (data.error || !data.rows || data.rows.length === 0) return;
+
+    // ใช้แถวแรกที่ active = TRUE
+    const row = data.rows.find(r => String(r['active']).toUpperCase() === 'TRUE');
+    if (!row) return;
+
+    // ใส่ข้อมูลลง popup
+    document.getElementById('popupTitle').textContent    = row['title']    || 'ประกาศ';
+    document.getElementById('popupSubtitle').textContent = row['subtitle'] || 'กลุ่มการตลาดโซน 2';
+    document.getElementById('popupIcon').textContent     = row['icon']     || '📢';
+    document.getElementById('popupMsg').textContent      = row['message']  || '';
+
+    // รูปภาพ (ถ้ามี URL)
+    const imgUrl = row['image_url'] || '';
+    if (imgUrl) {
+      document.getElementById('popupImg').src = imgUrl;
+      document.getElementById('popupImgWrap').style.display = 'block';
+    }
+
+    document.getElementById('popupOverlay').classList.remove('hidden');
+
+  } catch(e) {
+    console.log('Popup load error:', e);
+  }
+}
+
+function closePopup() {
+  if (document.getElementById('noShowCheck').checked) {
+    localStorage.setItem('popup_skip_date', new Date().toDateString());
+  }
+  document.getElementById('popupOverlay').classList.add('hidden');
+}
+
+// ปิด popup เมื่อคลิก overlay
+document.getElementById('popupOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePopup();
+});
+
+// โหลด popup ตอนเปิดหน้า
+window.addEventListener('load', loadPopup);
+</script>
 
 </body>
 </html>
