@@ -7,78 +7,104 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #C8102E; --red-dark: #9e0c24;
-    --gold: #F0A500; --gold-light: #ffc62b; --gold-pale: #fff8e7;
-    --white: #ffffff; --gray-50: #fafafa; --gray-100: #f4f4f4;
-    --gray-200: #e8e8e8; --gray-400: #999; --gray-700: #444; --gray-900: #1a1a1a;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.07); --radius: 14px;
+    --blue: #0D3B8C;
+    --blue-mid: #1557C0;
+    --blue-light: #2E7AE0;
+    --blue-pale: #EAF2FF;
+    --gold: #F0A500;
+    --gold-light: #ffc62b;
+    --gold-pale: #fff8e7;
+    --white: #ffffff;
+    --gray-50: #f5f7fb;
+    --gray-100: #eef1f7;
+    --gray-200: #dde3ef;
+    --gray-400: #8a94a8;
+    --gray-700: #445066;
+    --gray-900: #1a2236;
+    --shadow-sm: 0 2px 8px rgba(13,59,140,0.08);
+    --radius: 14px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Sarabun', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
-  header { background: var(--red); overflow: hidden; position: relative; }
-  header::after { content: ''; position: absolute; top: -30px; right: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+
+  header { background: var(--blue); overflow: hidden; position: relative; }
+  header::before { content: ''; position: absolute; top: -50px; right: -70px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  header::after  { content: ''; position: absolute; bottom: -30px; left: 20%; width: 160px; height: 160px; border-radius: 50%; background: rgba(240,165,0,0.10); }
   .header-inner { max-width: 1100px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
-  .back-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.88rem; text-decoration: none; transition: background 0.2s; }
+  .back-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.88rem; text-decoration: none; transition: background 0.2s; flex-shrink: 0; }
   .back-btn:hover { background: rgba(255,255,255,0.25); }
   .header-text { flex: 1; }
-  .header-text h1 { font-family: 'Noto Serif Thai', serif; font-size: 1.4rem; font-weight: 700; color: white; }
-  .header-text p { font-size: 0.83rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .header-text h1 { font-family: 'Noto Serif Thai', serif; font-size: 1.4rem; font-weight: 700; color: #fff; }
+  .header-text p  { font-size: 0.83rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
   .gold-bar { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+
   main { max-width: 1100px; margin: 0 auto; padding: 32px 32px 60px; }
 
-  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .search-box { flex: 1; min-width: 200px; position: relative; }
   .search-box input { width: 100%; padding: 10px 16px 10px 42px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-family: 'Sarabun', sans-serif; font-size: 0.92rem; background: var(--white); outline: none; transition: border-color 0.2s; }
-  .search-box input:focus { border-color: var(--red); }
-  .search-box .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--gray-400); }
+  .search-box input:focus { border-color: var(--blue-light); }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--gray-400); }
   .info-badge { background: var(--white); border: 1.5px solid var(--gray-200); padding: 8px 16px; border-radius: var(--radius); font-size: 0.83rem; color: var(--gray-400); white-space: nowrap; }
-  .info-badge span { color: var(--red); font-weight: 700; }
+  .info-badge span { color: var(--blue); font-weight: 700; }
 
-  /* Doc grid */
-  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .doc-card {
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    border: 1.5px solid var(--gray-200);
-    overflow: hidden;
-    transition: all 0.2s;
-    display: flex; flex-direction: column;
-  }
-  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); border-color: var(--red); }
-  .doc-top { background: var(--gray-100); padding: 24px; text-align: center; font-size: 2.5rem; }
-  .doc-card:hover .doc-top { background: #fff5f5; }
+  .filter-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .tab-btn { padding: 6px 16px; border: 1.5px solid var(--gray-200); border-radius: 20px; background: var(--white); font-family: 'Sarabun', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--gray-400); cursor: pointer; transition: all 0.18s; }
+  .tab-btn:hover { border-color: var(--blue-light); color: var(--blue); }
+  .tab-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+
+  .doc-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1.5px solid var(--gray-200); overflow: hidden; transition: all 0.2s; display: flex; flex-direction: column; }
+  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(13,59,140,0.13); border-color: var(--blue-light); }
+
+  .doc-top { background: var(--blue-pale); padding: 22px; text-align: center; font-size: 2.4rem; position: relative; transition: background 0.2s; }
+  .doc-card:hover .doc-top { background: #d4e8ff; }
+
+  .doc-type-badge { position: absolute; top: 10px; right: 10px; font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.04em; }
+  .badge-pdf  { background: #ffe4e4; color: #b83232; }
+  .badge-docx { background: #e4eeff; color: #1a4fa0; }
+  .badge-xlsx { background: #e4ffe6; color: #1a7a2a; }
+  .badge-pptx { background: #fff3e4; color: #a05000; }
+  .badge-other{ background: var(--gray-100); color: var(--gray-700); }
+
   .doc-body { padding: 14px 16px; flex: 1; }
-  .doc-name { font-weight: 700; font-size: 0.9rem; color: var(--gray-900); margin-bottom: 4px; }
-  .doc-cat { font-size: 0.75rem; color: var(--gray-400); }
-  .doc-footer { padding: 10px 16px; border-top: 1px solid var(--gray-100); display: flex; justify-content: flex-end; }
-  .dl-btn {
-    background: var(--red); color: white;
-    border: none; padding: 6px 14px;
-    border-radius: 8px; cursor: pointer;
-    font-family: 'Sarabun', sans-serif; font-size: 0.82rem;
-    font-weight: 600; text-decoration: none;
-    transition: background 0.2s;
-  }
-  .dl-btn:hover { background: var(--red-dark); }
+  .doc-name { font-weight: 700; font-size: 0.9rem; color: var(--gray-900); margin-bottom: 4px; line-height: 1.4; }
+  .doc-cat  { font-size: 0.75rem; color: var(--gray-400); }
 
-  /* Loading / empty */
+  .doc-footer { padding: 10px 14px; border-top: 1px solid var(--gray-100); display: flex; gap: 8px; justify-content: flex-end; }
+
+  .view-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-pale); color: var(--blue); border: 1.5px solid #b3d0f7; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.80rem; font-weight: 600; text-decoration: none; transition: all 0.18s; white-space: nowrap; }
+  .view-btn:hover { background: var(--blue-light); color: #fff; border-color: var(--blue-light); }
+
+  .dl-btn { display: inline-flex; align-items: center; gap: 4px; background: var(--blue); color: #fff; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.80rem; font-weight: 600; text-decoration: none; transition: background 0.18s; white-space: nowrap; }
+  .dl-btn:hover { background: var(--blue-mid); }
+
   .state-box { text-align: center; padding: 60px 24px; color: var(--gray-400); }
   .state-box .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
-  .spinner { width: 36px; height: 36px; border: 3px solid var(--gray-200); border-top-color: var(--red); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .config-notice { background: var(--gold-pale); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 16px 20px; font-size: 0.83rem; color: #7a5200; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; }
   .config-notice code { background: rgba(0,0,0,0.07); padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
   .error-box { background: #fff5f5; border: 1.5px solid #fcc; border-radius: var(--radius); padding: 20px 24px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
-  .error-box p { font-size: 0.88rem; color: var(--red); }
+  .error-box p { font-size: 0.88rem; color: #c0392b; }
 
   footer { text-align: center; padding: 24px; font-size: 0.8rem; color: var(--gray-400); border-top: 1px solid var(--gray-200); background: var(--white); }
-  footer span { color: var(--red); font-weight: 600; }
-  @media (max-width: 640px) { main { padding: 20px 12px 40px; } .header-inner { padding: 18px 16px; } }
+  footer span { color: var(--blue); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    main { padding: 20px 12px 40px; }
+    .header-inner { padding: 18px 16px; }
+    .doc-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 400px) {
+    .doc-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
+
 <header>
   <div class="header-inner">
     <a class="back-btn" href="index.html">← กลับ</a>
@@ -89,41 +115,50 @@
   </div>
 </header>
 <div class="gold-bar"></div>
+
 <main>
+
   <div class="config-notice" id="configNotice">
-    ⚙️ <div>ตั้งค่า <code>GAS_URL</code> และ <code>SHEET_NAME</code> ในไฟล์นี้ให้ตรงกับ Tab ที่เก็บข้อมูลเอกสาร (ต้องมีคอลัมน์ ชื่อ, หมวดหมู่, ประเภทไฟล์, ลิงก์ดาวน์โหลด)</div>
+    ⚙️ <div>กรุณาแทนที่ <code>GAS_URL</code> ด้วย URL ของ GAS Web App และตรวจสอบ <code>SHEET_NAME</code> ให้ตรงกับ Tab เอกสาร</div>
   </div>
+
   <div id="errorBox" class="error-box" style="display:none">
     <span>⚠️</span><p id="errorMsg"></p>
   </div>
+
   <div class="toolbar">
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="ค้นหาเอกสาร..." oninput="filterDocs()">
+      <input type="text" id="searchInput" placeholder="ค้นหาเอกสาร..." oninput="applyFilters()">
     </div>
     <div class="info-badge">ทั้งหมด <span id="docCount">-</span> ไฟล์</div>
   </div>
+
+  <div class="filter-tabs" id="filterTabs">
+    <button class="tab-btn active" onclick="setCategory('ทั้งหมด', this)">ทั้งหมด</button>
+  </div>
+
   <div id="docContainer">
     <div class="state-box"><div class="spinner"></div><p>กำลังโหลดเอกสาร...</p></div>
   </div>
+
 </main>
+
 <footer>&copy; 2025 <span>ไทยประกันชีวิต</span> &nbsp;|&nbsp; ระบบข้อมูลค่าตอบแทน</footer>
+
 <script>
-// ══════════════════════════════════════════════
-//  ⚙️  ตั้งค่าที่นี่
-// ══════════════════════════════════════════════
 const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
-const SHEET_NAME = 'documents';   // ← ชื่อ Tab ที่เก็บข้อมูลเอกสาร
-// คอลัมน์ที่ต้องมีใน Sheet: ชื่อไฟล์, หมวดหมู่, ประเภท (PDF/DOCX/XLSX), ลิงก์
-const COL_NAME  = 'ชื่อไฟล์';
-const COL_CAT   = 'หมวดหมู่';
-const COL_TYPE  = 'ประเภท';
-const COL_LINK  = 'ลิงก์';
-// ══════════════════════════════════════════════
+const SHEET_NAME = 'documents';
+const COL_NAME   = 'ชื่อไฟล์';
+const COL_CAT    = 'หมวดหมู่';
+const COL_TYPE   = 'ประเภท';
+const COL_LINK   = 'ลิงก์';
 
 let allDocs = [];
+let activeCategory = 'ทั้งหมด';
 
-const typeIcon = { 'PDF':'📄', 'DOCX':'📝', 'XLSX':'📊', 'PPTX':'📋' };
+const typeIcon  = { 'PDF':'📄', 'DOCX':'📝', 'XLSX':'📊', 'PPTX':'📋' };
+const typeClass = { 'PDF':'badge-pdf', 'DOCX':'badge-docx', 'XLSX':'badge-xlsx', 'PPTX':'badge-pptx' };
 
 async function loadData() {
   document.getElementById('errorBox').style.display = 'none';
@@ -133,13 +168,47 @@ async function loadData() {
     if (data.error) throw new Error(data.error);
     allDocs = data.rows || [];
     document.getElementById('configNotice').style.display = 'none';
-    renderDocs(allDocs);
+    buildCategoryTabs();
+    applyFilters();
   } catch(e) {
     document.getElementById('errorBox').style.display = 'flex';
     document.getElementById('errorMsg').textContent = 'โหลดข้อมูลไม่สำเร็จ: ' + e.message;
     document.getElementById('docContainer').innerHTML =
       '<div class="state-box"><span class="icon">⚠️</span><p>ไม่สามารถโหลดได้</p></div>';
   }
+}
+
+function buildCategoryTabs() {
+  const cats = [...new Set(allDocs.map(d => d[COL_CAT] || '').filter(Boolean))];
+  const tabsEl = document.getElementById('filterTabs');
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.textContent = cat;
+    btn.onclick = () => setCategory(cat, btn);
+    tabsEl.appendChild(btn);
+  });
+}
+
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let docs = allDocs;
+  if (activeCategory !== 'ทั้งหมด') {
+    docs = docs.filter(d => (d[COL_CAT] || '') === activeCategory);
+  }
+  if (q) {
+    docs = docs.filter(d =>
+      [COL_NAME, COL_CAT, COL_TYPE].some(k => String(d[k] || '').toLowerCase().includes(q))
+    );
+  }
+  renderDocs(docs);
 }
 
 function renderDocs(docs) {
@@ -150,27 +219,29 @@ function renderDocs(docs) {
     return;
   }
   const html = '<div class="doc-grid">' + docs.map(d => {
-    const icon = typeIcon[String(d[COL_TYPE]||'').toUpperCase()] || '📁';
+    const typeRaw = String(d[COL_TYPE] || '').toUpperCase();
+    const icon    = typeIcon[typeRaw]  || '📁';
+    const badge   = typeClass[typeRaw] || 'badge-other';
+    const link    = d[COL_LINK] || '#';
+    const name    = d[COL_NAME] || 'ไม่มีชื่อ';
+    const cat     = d[COL_CAT]  || '';
     return `
       <div class="doc-card">
-        <div class="doc-top">${icon}</div>
+        <div class="doc-top">
+          ${icon}
+          <span class="doc-type-badge ${badge}">${typeRaw || 'FILE'}</span>
+        </div>
         <div class="doc-body">
-          <div class="doc-name">${d[COL_NAME]||'ไม่มีชื่อ'}</div>
-          <div class="doc-cat">${d[COL_CAT]||''}</div>
+          <div class="doc-name">${name}</div>
+          <div class="doc-cat">${cat}</div>
         </div>
         <div class="doc-footer">
-          <a class="dl-btn" href="${d[COL_LINK]||'#'}" target="_blank" rel="noopener">⬇ ดาวน์โหลด</a>
+          <a class="view-btn" href="${link}" target="_blank" rel="noopener">👁 ดูเอกสาร</a>
+          <a class="dl-btn"   href="${link}" target="_blank" rel="noopener">⬇ ดาวน์โหลด</a>
         </div>
       </div>`;
   }).join('') + '</div>';
   document.getElementById('docContainer').innerHTML = html;
-}
-
-function filterDocs() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  renderDocs(q ? allDocs.filter(d =>
-    [COL_NAME,COL_CAT,COL_TYPE].some(k => String(d[k]||'').toLowerCase().includes(q))
-  ) : allDocs);
 }
 
 loadData();
