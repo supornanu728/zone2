@@ -230,7 +230,7 @@ footer b{color:var(--blue)}
 //  ⚙️  ตั้งค่า
 // ══════════════════════════════════════════════════
 const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
-const SHEET_NAME = 'prompts';
+const SHEET_NAME = 'prompts';   // ← ต้องมีใน SHEET_MAP ของ GAS ด้วย
 
 // ชื่อคอลัมน์ใน Sheet (ต้องตรงกับ Header แถวที่ 1)
 const C = {
@@ -267,12 +267,18 @@ async function loadData() {
       throw new Error(`JSON parse ล้มเหลว: ${parseErr.message}\nResponse: ${text.slice(0,200)}`);
     }
 
-    if (data.error) throw new Error(`GAS error: ${data.error}`);
+    if (data.error) throw new Error(
+      `GAS ตอบกลับ error: "${data.error}"\n` +
+      `→ ตรวจสอบว่า SHEET_MAP ใน GAS มี key "prompts" แล้ว`
+    );
 
-    // รองรับทั้ง { rows: [...] } และ [...] โดยตรง
+    // GAS ส่งกลับเป็น { headers: [...], rows: [...], total: N }
     const rows = Array.isArray(data) ? data : (data.rows || data.data || []);
 
-    if (!rows.length) throw new Error('ไม่พบข้อมูลใน Sheet (rows = 0) — ตรวจสอบชื่อ Sheet และ Header');
+    if (!rows.length) throw new Error(
+      'Sheet "prompts" ไม่มีข้อมูล (rows = 0)\n' +
+      '→ ตรวจสอบว่า Tab ชื่อ "prompts" ใน Spreadsheet มีข้อมูลและ Header ถูกต้อง'
+    );
 
     all = rows;
     buildTabs();
