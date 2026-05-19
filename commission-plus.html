@@ -97,11 +97,10 @@ main{max-width:1100px;margin:0 auto;padding:32px 32px 64px}
 .spinner{width:36px;height:36px;border:3px solid var(--g200);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── NOTICE ── */
-.notice{background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:var(--r);padding:14px 18px;font-size:.82rem;color:#7a5200;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px}
-.notice code{background:rgba(0,0,0,.07);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:.84em}
+/* ── NOTICE / ERROR ── */
 .err{background:#fff5f5;border:1.5px solid #fcc;border-radius:var(--r);padding:16px 20px;display:flex;align-items:flex-start;gap:10px;margin-bottom:20px}
 .err p{font-size:.86rem;color:#c0392b;line-height:1.5}
+.err details{font-size:.78rem;color:#c0392b;margin-top:6px;cursor:pointer}
 
 /* ── OVERLAY / MODAL ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(8,20,55,.58);z-index:999;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(3px)}
@@ -168,12 +167,12 @@ footer b{color:var(--blue)}
 
 <main>
 
-  <div class="notice" id="notice">
-    ⚙️ <div>กรุณาแทนที่ <code>YOUR_GAS_URL</code> ในไฟล์นี้ด้วย URL ของ GAS Web App ที่ Deploy แล้ว<br>ระหว่างนี้จะแสดงข้อมูลตัวอย่างให้ดูก่อน</div>
-  </div>
-
   <div class="err" id="errBox" style="display:none">
-    <span>⚠️</span><p id="errMsg"></p>
+    <span>⚠️</span>
+    <div>
+      <p id="errMsg"></p>
+      <details id="errDetail"><summary>รายละเอียด</summary><span id="errStack"></span></details>
+    </div>
   </div>
 
   <div class="toolbar">
@@ -228,9 +227,9 @@ footer b{color:var(--blue)}
 
 <script>
 // ══════════════════════════════════════════════════
-//  ⚙️  ตั้งค่า — แก้ตรงนี้อย่างเดียว
+//  ⚙️  ตั้งค่า
 // ══════════════════════════════════════════════════
-const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';   // ← วาง URL GAS Web App ที่นี่
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
 const SHEET_NAME = 'prompts';
 
 // ชื่อคอลัมน์ใน Sheet (ต้องตรงกับ Header แถวที่ 1)
@@ -246,35 +245,64 @@ const C = {
 
 let all = [], activeCat = 'ทั้งหมด', origPrompt = '', curIdx = -1;
 
-// ── โหลดข้อมูล ──────────────────────────────────
+// ── โหลดข้อมูลจาก GAS ───────────────────────────
 async function loadData() {
   document.getElementById('container').innerHTML =
-    '<div class="state"><div class="spinner"></div><p>กำลังโหลด Prompt...</p></div>';
+    '<div class="state"><div class="spinner"></div><p>กำลังโหลด Prompt จาก Google Sheet...</p></div>';
   document.getElementById('errBox').style.display = 'none';
 
-  if (GAS_URL === 'YOUR_GAS_URL') {
-    // ยังไม่ได้ตั้งค่า → แสดงตัวอย่าง
-    all = SAMPLES;
-    document.getElementById('notice').style.display = 'flex';
-    buildTabs(); filter();
-    return;
-  }
+  const url = `${GAS_URL}?sheet=${encodeURIComponent(SHEET_NAME)}&t=${Date.now()}`;
 
   try {
-    const res  = await fetch(`${GAS_URL}?sheet=${encodeURIComponent(SHEET_NAME)}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    all = data.rows || [];
-    document.getElementById('notice').style.display = 'none';
-    buildTabs(); filter();
+    const res = await fetch(url, { cache: 'no-store' });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+
+    // GAS อาจส่ง Content-Type เป็น text/plain แต่ body เป็น JSON
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch(parseErr) {
+      throw new Error(`JSON parse ล้มเหลว: ${parseErr.message}\nResponse: ${text.slice(0,200)}`);
+    }
+
+    if (data.error) throw new Error(`GAS error: ${data.error}`);
+
+    // รองรับทั้ง { rows: [...] } และ [...] โดยตรง
+    const rows = Array.isArray(data) ? data : (data.rows || data.data || []);
+
+    if (!rows.length) throw new Error('ไม่พบข้อมูลใน Sheet (rows = 0) — ตรวจสอบชื่อ Sheet และ Header');
+
+    all = rows;
+    buildTabs();
+    filter();
+
   } catch(e) {
-    // fallback → sample
-    all = SAMPLES;
-    document.getElementById('errBox').style.display = 'flex';
-    document.getElementById('errMsg').textContent =
-      `เชื่อมต่อ GAS ไม่ได้ (${e.message}) — แสดงข้อมูลตัวอย่างแทน`;
-    buildTabs(); filter();
+    showError(e);
+    // ไม่ fallback ไป sample อีกต่อไป — แสดง error ชัดเจนแทน
+    document.getElementById('container').innerHTML =
+      '<div class="state"><span class="ico">❌</span><p>ไม่สามารถโหลดข้อมูลได้<br>ดูรายละเอียดด้านบน</p></div>';
+  }
+}
+
+function showError(e) {
+  const box  = document.getElementById('errBox');
+  const msg  = document.getElementById('errMsg');
+  const stk  = document.getElementById('errStack');
+  const det  = document.getElementById('errDetail');
+
+  box.style.display = 'flex';
+
+  const mainMsg = e.message || String(e);
+  // แยก main message กับ stack
+  const parts = mainMsg.split('\n');
+  msg.textContent = parts[0];
+  if (parts.length > 1) {
+    stk.textContent = parts.slice(1).join('\n');
+    det.style.display = 'block';
+  } else {
+    det.style.display = 'none';
   }
 }
 
@@ -319,8 +347,7 @@ function render(items) {
     return;
   }
 
-  const html = '<div class="grid">' + items.map((p, i) => {
-    // หา index จริงใน all[]
+  const html = '<div class="grid">' + items.map((p) => {
     const realIdx = all.indexOf(p);
     const title   = esc(p[C.title]  || 'Prompt');
     const cat     = esc(p[C.cat]    || '');
@@ -375,7 +402,6 @@ function openModal(idx) {
   curIdx = idx;
   origPrompt = p[C.prompt] || '';
 
-  // header
   const img   = p[C.img]   || '';
   const title = p[C.title] || 'Prompt';
   const cat   = p[C.cat]   || '';
@@ -385,7 +411,6 @@ function openModal(idx) {
   if (img) {
     th.outerHTML = `<img class="mthumb" id="mthumb" src="${esc(img)}" alt="${esc(title)}" onerror="this.style.display='none'">`;
   } else {
-    // reset กลับเป็น div ถ้าเคยเปลี่ยน
     if (th.tagName === 'IMG') {
       th.outerHTML = `<div class="mthumb-ico" id="mthumb">🤖</div>`;
     } else {
@@ -430,7 +455,6 @@ async function copyPrompt() {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
-    // fallback
     const ta = document.getElementById('ta');
     ta.select(); ta.setSelectionRange(0,99999);
     document.execCommand('copy');
@@ -440,18 +464,7 @@ async function copyPrompt() {
   setTimeout(resetCopyBtn, 2800);
 }
 
-// ปิดด้วย ESC
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-
-// ── ข้อมูลตัวอย่าง ────────────────────────────────
-const SAMPLES = [
-  {[C.title]:'แนะนำประกันชีวิตเบื้องต้น',[C.cat]:'เปิดการขาย',[C.desc]:'ใช้สำหรับส่งให้ลูกค้าที่ยังไม่รู้จักประกันชีวิต',[C.prompt]:'สวัสดีครับ/ค่ะ 😊 ผม/หนูเป็นที่ปรึกษาการเงินจากไทยประกันชีวิต\n\nอยากแชร์ข้อมูลดีๆ ให้ครับ/ค่ะ ทราบไหมครับ/คะ ว่าการมีประกันชีวิตช่วยปกป้องครอบครัวได้อย่างไรบ้าง?\n\n✅ คุ้มครองรายได้เมื่อเกิดเหตุไม่คาดฝัน\n✅ สร้างเงินออมระยะยาว\n✅ ลดหย่อนภาษีได้สูงสุด 100,000 บาท\n\nสนใจให้แนะนำแบบที่เหมาะกับคุณไหมครับ/คะ? 📞',[C.img]:'',[C.tags]:'เริ่มต้น,ลูกค้าใหม่'},
-  {[C.title]:'ติดตามลูกค้าหลังนำเสนอ',[C.cat]:'ติดตามงาน',[C.desc]:'ส่งหลังจากนำเสนอแผนประกันไปแล้ว 2-3 วัน',[C.prompt]:'สวัสดีครับ/ค่ะ คุณ [ชื่อลูกค้า] 🙏\n\nตามที่คุยกันเรื่องแผนประกันชีวิตไปเมื่อวันที่ [วันที่] นะครับ/คะ\n\nมีข้อสงสัยหรืออยากให้อธิบายเพิ่มเติมส่วนไหนไหมครับ/คะ?\nยินดีให้คำแนะนำเพิ่มเติมได้เลยนะครับ/ค่ะ 😊\n\n[ชื่อ] ที่ปรึกษาการเงิน ไทยประกันชีวิต\n📱 [เบอร์โทร]',[C.img]:'',[C.tags]:'ติดตาม,Follow up'},
-  {[C.title]:'ส่งข้อมูลแบบประกันสุขภาพ',[C.cat]:'นำเสนอสินค้า',[C.desc]:'ใช้แนะนำแบบประกันสุขภาพให้ลูกค้า',[C.prompt]:'สวัสดีครับ/ค่ะ คุณ [ชื่อ] 😊\n\nตามที่คุณสนใจเรื่องประกันสุขภาพนะครับ/คะ\nขอแนะนำแบบ [ชื่อแบบประกัน] ครับ/ค่ะ\n\n🏥 จุดเด่น:\n• คุ้มครองค่ารักษาพยาบาลผู้ป่วยใน\n• ไม่ต้องสำรองจ่าย (โรงพยาบาลในเครือ)\n• คุ้มครองโรคร้ายแรง [จำนวน] โรค\n\n💰 เบี้ยเริ่มต้นเพียง [จำนวน] บาท/เดือน\n\nสนใจนัดคุยรายละเอียดเพิ่มเติมไหมครับ/คะ? 📅',[C.img]:'',[C.tags]:'สุขภาพ,แนะนำ'},
-  {[C.title]:'ขอบคุณหลังปิดการขาย',[C.cat]:'หลังการขาย',[C.desc]:'ส่งให้ลูกค้าทันทีหลังจากสมัครกรมธรรม์',[C.prompt]:'สวัสดีครับ/ค่ะ คุณ [ชื่อลูกค้า] 🎉\n\nขอบคุณมากครับ/ค่ะ ที่ไว้วางใจไทยประกันชีวิต\n\n📋 สรุปกรมธรรม์ของคุณ:\n• แบบประกัน: [ชื่อแบบ]\n• ทุนประกัน: [จำนวน] บาท\n• เบี้ยประกัน: [จำนวน] บาท/ปี\n• วันเริ่มคุ้มครอง: [วันที่]\n\nกรมธรรม์จะส่งถึงคุณภายใน 7-10 วันทำการครับ/ค่ะ\n\nมีข้อสงสัยติดต่อได้ตลอดนะครับ/คะ 😊\n[ชื่อ] 📱 [เบอร์โทร]',[C.img]:'',[C.tags]:'ขอบคุณ,ปิดการขาย'},
-  {[C.title]:'แจ้งเตือนต่ออายุกรมธรรม์',[C.cat]:'หลังการขาย',[C.desc]:'ส่งก่อนกรมธรรม์หมดอายุ 30 วัน',[C.prompt]:'สวัสดีครับ/ค่ะ คุณ [ชื่อ] 🙏\n\nแจ้งให้ทราบว่ากรมธรรม์เลขที่ [เลขที่] ของคุณ\nจะครบกำหนดต่ออายุในวันที่ [วันที่] ครับ/ค่ะ\n\n⏰ เหลือเวลาอีก [จำนวน] วัน\n💳 เบี้ยที่ต้องชำระ: [จำนวน] บาท\n\nเพื่อไม่ให้ขาดความคุ้มครอง รบกวนต่ออายุก่อนถึงกำหนดนะครับ/คะ\n\nสอบถามเพิ่มเติมได้เลยครับ/ค่ะ 😊',[C.img]:'',[C.tags]:'ต่ออายุ,แจ้งเตือน'},
-  {[C.title]:'ชวนลูกค้าเก่าซื้อเพิ่ม',[C.cat]:'เปิดการขาย',[C.desc]:'สำหรับลูกค้าเก่าที่มีกรมธรรม์อยู่แล้ว',[C.prompt]:'สวัสดีครับ/ค่ะ คุณ [ชื่อ] 😊\n\nในฐานะลูกค้าคนพิเศษของไทยประกันชีวิต\nอยากแนะนำโปรโมชั่นพิเศษสำหรับคุณโดยเฉพาะครับ/ค่ะ\n\n🎁 สิทธิพิเศษสำหรับลูกค้าเก่า:\n• [สิทธิพิเศษ 1]\n• [สิทธิพิเศษ 2]\n• [สิทธิพิเศษ 3]\n\nสนใจให้แนะนำแผนเพิ่มเติมที่เหมาะกับคุณไหมครับ/คะ? 🌟',[C.img]:'',[C.tags]:'ลูกค้าเก่า,Upsell'},
-];
 
 loadData();
 </script>
