@@ -160,6 +160,19 @@ let activeCategory = 'ทั้งหมด';
 const typeIcon  = { 'PDF':'📄', 'DOCX':'📝', 'XLSX':'📊', 'PPTX':'📋' };
 const typeClass = { 'PDF':'badge-pdf', 'DOCX':'badge-docx', 'XLSX':'badge-xlsx', 'PPTX':'badge-pptx' };
 
+// แปลง Google Drive URL ทุกรูปแบบให้เป็น direct download link
+function toDownloadUrl(url) {
+  if (!url || url === '#') return '#';
+  // รูปแบบ: /file/d/FILE_ID/view  หรือ  /file/d/FILE_ID/edit
+  const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m1) return `https://drive.google.com/uc?export=download&id=${m1[1]}`;
+  // รูปแบบ: ?id=FILE_ID
+  const m2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/uc?export=download&id=${m2[1]}`;
+  // ถ้าไม่ใช่ Drive ใช้ URL เดิม
+  return url;
+}
+
 async function loadData() {
   document.getElementById('errorBox').style.display = 'none';
   try {
@@ -223,6 +236,7 @@ function renderDocs(docs) {
     const icon    = typeIcon[typeRaw]  || '📁';
     const badge   = typeClass[typeRaw] || 'badge-other';
     const link    = d[COL_LINK] || '#';
+    const dlLink  = toDownloadUrl(link);
     const name    = d[COL_NAME] || 'ไม่มีชื่อ';
     const cat     = d[COL_CAT]  || '';
     return `
@@ -236,8 +250,8 @@ function renderDocs(docs) {
           <div class="doc-cat">${cat}</div>
         </div>
         <div class="doc-footer">
-          <a class="view-btn" href="${link}" target="_blank" rel="noopener">👁 ดูเอกสาร</a>
-          <a class="dl-btn"   href="${link}" target="_blank" rel="noopener">⬇ ดาวน์โหลด</a>
+          <a class="view-btn" href="${link}"   target="_blank" rel="noopener">👁 ดูเอกสาร</a>
+          <a class="dl-btn"   href="${dlLink}" target="_blank" rel="noopener" download="${name}">⬇ ดาวน์โหลด</a>
         </div>
       </div>`;
   }).join('') + '</div>';
