@@ -3,109 +3,554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ค่าคอมพลัส | ไทยประกันชีวิต</title>
+<title>คลัง Prompt AI | ไทยประกันชีวิต</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --red:#C8102E;--red-dark:#9e0c24;--gold:#F0A500;--gold-light:#ffc62b;--gold-pale:#fff8e7;--white:#fff;--gray-50:#fafafa;--gray-100:#f4f4f4;--gray-200:#e8e8e8;--gray-400:#999;--gray-700:#444;--gray-900:#1a1a1a;--shadow-sm:0 2px 8px rgba(0,0,0,.07);--radius:14px; }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Sarabun',sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh}
-  header{background:var(--red);overflow:hidden;position:relative}
-  header::after{content:'';position:absolute;top:-30px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
-  .header-inner{max-width:1100px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;gap:16px;position:relative;z-index:1}
-  .back-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:.88rem;text-decoration:none;transition:background .2s}
-  .back-btn:hover{background:rgba(255,255,255,.25)}
-  .header-text{flex:1}
-  .header-text h1{font-family:'Noto Serif Thai',serif;font-size:1.4rem;font-weight:700;color:#fff}
-  .header-text p{font-size:.83rem;color:rgba(255,255,255,.7);margin-top:2px}
-  .gold-bar{height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
-  main{max-width:1100px;margin:0 auto;padding:32px 32px 60px}
-  .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-  .search-box{flex:1;min-width:200px;position:relative}
-  .search-box input{width:100%;padding:10px 16px 10px 42px;border:1.5px solid var(--gray-200);border-radius:var(--radius);font-family:'Sarabun',sans-serif;font-size:.92rem;background:#fff;outline:none;transition:border-color .2s}
-  .search-box input:focus{border-color:var(--red)}
-  .search-box .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--gray-400)}
-  .info-badge{background:#fff;border:1.5px solid var(--gray-200);padding:8px 16px;border-radius:var(--radius);font-size:.83rem;color:var(--gray-400);white-space:nowrap}
-  .info-badge span{color:var(--red);font-weight:700}
-  .refresh-btn{background:#fff;border:1.5px solid var(--gray-200);padding:9px 14px;border-radius:var(--radius);cursor:pointer;font-size:1rem;transition:all .2s;color:var(--gray-700)}
-  .refresh-btn:hover{border-color:var(--red);color:var(--red)}
-  .table-wrap{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1.5px solid var(--gray-200);overflow:hidden}
-  .table-head-bar{background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-  .table-head-bar h2{font-family:'Noto Serif Thai',serif;font-size:.95rem;font-weight:700;color:#fff}
-  .table-head-bar .updated{font-size:.78rem;color:rgba(255,255,255,.65)}
-  .table-scroll{overflow-x:auto}
-  table{width:100%;border-collapse:collapse;font-size:.88rem}
-  thead th{background:var(--gray-100);color:var(--gray-700);font-weight:700;padding:12px 16px;text-align:left;border-bottom:2px solid var(--gray-200);white-space:nowrap;font-size:.82rem;letter-spacing:.02em}
-  tbody tr{border-bottom:1px solid var(--gray-100);transition:background .15s}
-  tbody tr:hover{background:#fff5f5}
-  tbody tr:last-child{border-bottom:none}
-  td{padding:12px 16px;color:var(--gray-700)}
-  td:first-child{font-weight:600;color:var(--gray-900)}
-  .state-box{text-align:center;padding:60px 24px;color:var(--gray-400)}
-  .spinner{width:36px;height:36px;border:3px solid var(--gray-200);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .error-box{background:#fff5f5;border:1.5px solid #fcc;border-radius:var(--radius);padding:20px 24px;display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
-  .error-box p{font-size:.88rem;color:var(--red);line-height:1.55}
-  .config-notice{background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:var(--radius);padding:16px 20px;font-size:.83rem;color:#7a5200;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px}
-  .config-notice code{background:rgba(0,0,0,.07);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:.85em}
-  footer{text-align:center;padding:24px;font-size:.8rem;color:var(--gray-400);border-top:1px solid var(--gray-200);background:#fff}
-  footer span{color:var(--red);font-weight:600}
-  @media(max-width:640px){main{padding:20px 12px 40px}.header-inner{padding:18px 16px}}
+  :root {
+    --blue: #0D3B8C;
+    --blue-mid: #1557C0;
+    --blue-light: #2E7AE0;
+    --blue-pale: #EAF2FF;
+    --blue-pale2: #d4e8ff;
+    --gold: #F0A500;
+    --gold-light: #ffc62b;
+    --gold-pale: #fff8e7;
+    --white: #fff;
+    --gray-50: #f5f7fb;
+    --gray-100: #eef1f7;
+    --gray-200: #dde3ef;
+    --gray-400: #8a94a8;
+    --gray-600: #5a6478;
+    --gray-700: #445066;
+    --gray-900: #1a2236;
+    --shadow-sm: 0 2px 8px rgba(13,59,140,0.08);
+    --shadow-md: 0 8px 28px rgba(13,59,140,0.14);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; }
+
+  /* ─── HEADER ─── */
+  header { background: var(--blue); overflow: hidden; position: relative; }
+  header::before { content: ''; position: absolute; top: -50px; right: -70px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  header::after  { content: ''; position: absolute; bottom: -30px; left: 20%; width: 160px; height: 160px; border-radius: 50%; background: rgba(240,165,0,0.10); }
+  .header-inner { max-width: 1100px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
+  .back-btn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 0.88rem; text-decoration: none; transition: background 0.2s; flex-shrink: 0; }
+  .back-btn:hover { background: rgba(255,255,255,0.25); }
+  .header-text { flex: 1; }
+  .header-text h1 { font-family: 'Noto Serif Thai', serif; font-size: 1.4rem; font-weight: 700; color: #fff; }
+  .header-text p  { font-size: 0.83rem; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .gold-bar { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+
+  /* ─── MAIN ─── */
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 32px 60px; }
+
+  /* ─── TOOLBAR ─── */
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .search-box { flex: 1; min-width: 200px; position: relative; }
+  .search-box input { width: 100%; padding: 10px 16px 10px 42px; border: 1.5px solid var(--gray-200); border-radius: var(--radius); font-family: 'Sarabun', sans-serif; font-size: 0.92rem; background: var(--white); outline: none; transition: border-color 0.2s; }
+  .search-box input:focus { border-color: var(--blue-light); }
+  .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--gray-400); pointer-events: none; }
+  .info-badge { background: var(--white); border: 1.5px solid var(--gray-200); padding: 8px 16px; border-radius: var(--radius); font-size: 0.83rem; color: var(--gray-400); white-space: nowrap; }
+  .info-badge span { color: var(--blue); font-weight: 700; }
+
+  /* ─── CATEGORY TABS ─── */
+  .filter-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .tab-btn { padding: 6px 16px; border: 1.5px solid var(--gray-200); border-radius: 20px; background: var(--white); font-family: 'Sarabun', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--gray-400); cursor: pointer; transition: all 0.18s; }
+  .tab-btn:hover { border-color: var(--blue-light); color: var(--blue); }
+  .tab-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+  /* ─── PROMPT GRID ─── */
+  .prompt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+
+  .prompt-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid var(--gray-200);
+    overflow: hidden;
+    transition: all 0.22s;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+  }
+  .prompt-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--blue-light); }
+
+  .card-header {
+    background: var(--blue-pale);
+    padding: 16px 18px 12px;
+    display: flex; align-items: flex-start; gap: 12px;
+    transition: background 0.2s;
+  }
+  .prompt-card:hover .card-header { background: var(--blue-pale2); }
+
+  .card-img {
+    width: 64px; height: 64px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid rgba(13,59,140,0.12);
+    background: var(--gray-100);
+  }
+  .card-img-placeholder {
+    width: 64px; height: 64px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: var(--blue-pale2);
+    border: 2px solid rgba(13,59,140,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+  .card-title { font-family: 'Noto Serif Thai', serif; font-size: 0.97rem; font-weight: 700; color: var(--blue); margin-bottom: 4px; line-height: 1.3; }
+  .card-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+  .card-tag { font-size: 0.70rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: rgba(13,59,140,0.10); color: var(--blue); letter-spacing: 0.02em; }
+
+  .card-body { padding: 14px 18px; flex: 1; }
+  .card-preview {
+    font-size: 0.83rem;
+    color: var(--gray-600);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: 'Sarabun', sans-serif;
+    white-space: pre-wrap;
+  }
+
+  .card-footer {
+    padding: 10px 18px;
+    border-top: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-hint { font-size: 0.75rem; color: var(--gray-400); }
+  .card-open-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--blue); color: #fff;
+    border: none; padding: 6px 14px; border-radius: var(--radius-sm);
+    font-family: 'Sarabun', sans-serif; font-size: 0.80rem; font-weight: 600;
+    cursor: pointer; transition: background 0.18s;
+  }
+  .card-open-btn:hover { background: var(--blue-mid); }
+
+  /* ─── MODAL OVERLAY ─── */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(10, 25, 60, 0.55);
+    z-index: 1000;
+    align-items: center; justify-content: center;
+    padding: 16px;
+    backdrop-filter: blur(2px);
+  }
+  .overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius);
+    width: 100%; max-width: 680px;
+    max-height: 92vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 64px rgba(13,59,140,0.22);
+    animation: modalIn 0.22s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+  .modal-header {
+    background: var(--blue);
+    padding: 18px 22px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: flex; align-items: flex-start; gap: 14px;
+    flex-shrink: 0;
+  }
+  .modal-img {
+    width: 52px; height: 52px;
+    border-radius: 10px; object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.25);
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.1);
+  }
+  .modal-img-placeholder {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; flex-shrink: 0;
+  }
+  .modal-title-wrap { flex: 1; min-width: 0; }
+  .modal-title { font-family: 'Noto Serif Thai', serif; font-size: 1.05rem; font-weight: 700; color: #fff; }
+  .modal-subtitle { font-size: 0.80rem; color: rgba(255,255,255,0.65); margin-top: 3px; }
+  .modal-close {
+    background: rgba(255,255,255,0.15); border: none; color: #fff;
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.18s; line-height: 1;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
+
+  .modal-body { padding: 20px 22px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+
+  .modal-label { font-size: 0.82rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .modal-desc { font-size: 0.85rem; color: var(--gray-600); line-height: 1.55; }
+
+  .prompt-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.90rem;
+    line-height: 1.65;
+    color: var(--gray-900);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gray-50);
+  }
+  .prompt-textarea:focus { border-color: var(--blue-light); background: #fff; }
+
+  .modal-hint { font-size: 0.78rem; color: var(--gray-400); display: flex; align-items: center; gap: 6px; }
+
+  .modal-footer {
+    padding: 14px 22px;
+    border-top: 1px solid var(--gray-100);
+    display: flex; gap: 10px; justify-content: flex-end;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .btn-reset {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--white); color: var(--gray-700);
+    border: 1.5px solid var(--gray-200); padding: 9px 18px;
+    border-radius: var(--radius-sm); font-family: 'Sarabun', sans-serif;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    transition: all 0.18s;
+  }
+  .btn-reset:hover { border-color: var(--blue-light); color: var(--blue); }
+
+  .btn-copy {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--blue); color: #fff;
+    border: none; padding: 9px 22px;
+    border-radius: var(--radius-sm); font-family: 'Sarabun', sans-serif;
+    font-size: 0.88rem; font-weight: 700; cursor: pointer;
+    transition: background 0.18s; white-space: nowrap;
+  }
+  .btn-copy:hover { background: var(--blue-mid); }
+  .btn-copy.copied { background: #16a34a; }
+
+  /* ─── NOTICE / STATE ─── */
+  .config-notice { background: var(--gold-pale); border: 1.5px solid var(--gold); border-radius: var(--radius); padding: 16px 20px; font-size: 0.83rem; color: #7a5200; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; }
+  .config-notice code { background: rgba(0,0,0,0.07); padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
+  .state-box { text-align: center; padding: 60px 24px; color: var(--gray-400); }
+  .state-box .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--gray-200); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error-box { background: #fff5f5; border: 1.5px solid #fcc; border-radius: var(--radius); padding: 20px 24px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+  .error-box p { font-size: 0.88rem; color: #c0392b; }
+
+  footer { text-align: center; padding: 24px; font-size: 0.8rem; color: var(--gray-400); border-top: 1px solid var(--gray-200); background: var(--white); margin-top: 40px; }
+  footer span { color: var(--blue); font-weight: 600; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    main { padding: 20px 14px 40px; }
+    .header-inner { padding: 18px 16px; }
+    .prompt-grid { grid-template-columns: 1fr; }
+    .modal { max-height: 95vh; }
+    .modal-footer { justify-content: stretch; }
+    .btn-copy, .btn-reset { flex: 1; justify-content: center; }
+  }
 </style>
 </head>
 <body>
+
 <header>
   <div class="header-inner">
     <a class="back-btn" href="index.html">← กลับ</a>
     <div class="header-text">
-      <h1>💎 ค่าคอมพลัส</h1>
-      <p>ค่าคอมมิชชั่นโบนัสพิเศษ สำหรับยอดขายที่เกินเป้าหมาย</p>
+      <h1>🤖 คลัง Prompt AI</h1>
+      <p>เลือก Prompt สำเร็จรูป แก้ไข แล้วคัดลอกไปใช้ได้เลย</p>
     </div>
   </div>
 </header>
 <div class="gold-bar"></div>
+
 <main>
-  <div class="config-notice" id="cn">⚙️ <div>กรุณาแทนที่ <code>YOUR_GAS_WEB_APP_URL</code> และตรวจสอบ <code>SHEET_NAME</code> ให้ตรงกับ Tab ค่าคอมพลัสใน Spreadsheet</div></div>
+
+  <div class="config-notice" id="configNotice">
+    ⚙️ <div>กรุณาแทนที่ <code>YOUR_GAS_WEB_APP_URL</code> ด้วย URL ของ GAS Web App และตรวจสอบ <code>SHEET_NAME</code> ให้ตรงกับ Tab ที่เก็บข้อมูล Prompt</div>
+  </div>
+
+  <div id="errorBox" class="error-box" style="display:none">
+    <span>⚠️</span><p id="errorMsg"></p>
+  </div>
+
   <div class="toolbar">
-    <div class="search-box"><span class="si">🔍</span><input type="text" id="si" placeholder="ค้นหาข้อมูล..." oninput="f()"></div>
-    <div class="info-badge">ทั้งหมด <span id="rc">-</span> รายการ</div>
-    <button class="refresh-btn" onclick="load()" title="รีเฟรช">🔄</button>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="ค้นหา Prompt..." oninput="applyFilters()">
+    </div>
+    <div class="info-badge">ทั้งหมด <span id="promptCount">-</span> Prompt</div>
   </div>
-  <div id="eb" class="error-box" style="display:none"><span>⚠️</span><p id="em"></p></div>
-  <div class="table-wrap">
-    <div class="table-head-bar"><h2>ตารางค่าคอมพลัส</h2><span class="updated" id="ua">—</span></div>
-    <div class="table-scroll"><div id="tc"><div class="state-box"><div class="spinner"></div><p>กำลังโหลดข้อมูล...</p></div></div></div>
+
+  <div class="filter-tabs" id="filterTabs">
+    <button class="tab-btn active" onclick="setCategory('ทั้งหมด', this)">ทั้งหมด</button>
   </div>
+
+  <div id="promptContainer">
+    <div class="state-box"><div class="spinner"></div><p>กำลังโหลด Prompt...</p></div>
+  </div>
+
 </main>
-<footer>&copy; 2025 <span>ไทยประกันชีวิต</span> &nbsp;|&nbsp; ข้อมูลเชื่อมต่อจาก Google Sheets</footer>
+
+<!-- ─── MODAL ─── -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <div class="modal-img-placeholder" id="modalImg">🤖</div>
+      <div class="modal-title-wrap">
+        <div class="modal-title" id="modalTitle">—</div>
+        <div class="modal-subtitle" id="modalSub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()" aria-label="ปิด">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-label">📝 Prompt</div>
+        <div class="modal-desc" id="modalDesc" style="margin-bottom:10px;display:none"></div>
+        <textarea class="prompt-textarea" id="promptText" placeholder="ข้อความ Prompt จะแสดงที่นี่..."></textarea>
+        <div class="modal-hint">✏️ แก้ไข Prompt ได้ตามต้องการก่อนคัดลอก</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-reset" onclick="resetPrompt()">↺ รีเซ็ต</button>
+      <button class="btn-copy" id="copyBtn" onclick="copyPrompt()">📋 คัดลอก Prompt</button>
+    </div>
+  </div>
+</div>
+
+<footer>&copy; 2025 <span>ไทยประกันชีวิต</span> &nbsp;|&nbsp; คลัง Prompt AI สำหรับฝ่ายขาย</footer>
+
 <script>
-const GAS_URL='https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec', SHEET_NAME='commission_plus';
-let allRows=[],headers=[];
-async function load(){
-  document.getElementById('tc').innerHTML='<div class="state-box"><div class="spinner"></div><p>กำลังโหลด...</p></div>';
-  document.getElementById('eb').style.display='none';document.getElementById('rc').textContent='-';
-  try{
-    const res=await fetch(`${GAS_URL}?sheet=${encodeURIComponent(SHEET_NAME)}`);
-    if(!res.ok)throw new Error(`HTTP ${res.status}`);
-    const d=await res.json();
-    if(d.error)throw new Error(d.error);
-    if(!d.rows||!d.rows.length){document.getElementById('tc').innerHTML='<div class="state-box"><span>📭</span><p>ไม่พบข้อมูล</p></div>';return;}
-    headers=d.headers||Object.keys(d.rows[0]);allRows=d.rows;
-    document.getElementById('ua').textContent='อัปเดต: '+new Date().toLocaleString('th-TH');
-    document.getElementById('cn').style.display='none';render(allRows);
-  }catch(e){
-    document.getElementById('eb').style.display='flex';document.getElementById('em').textContent='โหลดไม่สำเร็จ: '+e.message;
-    document.getElementById('tc').innerHTML='<div class="state-box"><span>⚠️</span><p>ไม่สามารถโหลดได้</p></div>';
+// ══════════════════════════════════════════════
+//  ⚙️  ตั้งค่าที่นี่
+// ══════════════════════════════════════════════
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyer6-27TCXDcaNY21sUfg3IltOtpMZEXHKmwFH9uA44TFeJB5rn3hkSgxsB9uRdnrQWA/exec';
+const SHEET_NAME = 'prompts';
+// คอลัมน์ที่ต้องมีใน Sheet:
+//   ชื่อ Prompt | หมวดหมู่ | คำอธิบาย | Prompt | รูปภาพ (URL) | แท็ก (คั่นด้วย,)
+const COL_TITLE  = 'ชื่อ Prompt';
+const COL_CAT    = 'หมวดหมู่';
+const COL_DESC   = 'คำอธิบาย';
+const COL_PROMPT = 'Prompt';
+const COL_IMG    = 'รูปภาพ';
+const COL_TAGS   = 'แท็ก';
+// ══════════════════════════════════════════════
+
+let allPrompts = [];
+let activeCategory = 'ทั้งหมด';
+let originalPrompt = '';
+
+// ── โหลดข้อมูลจาก GAS ──
+async function loadData() {
+  document.getElementById('errorBox').style.display = 'none';
+  try {
+    const res  = await fetch(`${GAS_URL}?sheet=${encodeURIComponent(SHEET_NAME)}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    allPrompts = data.rows || [];
+    document.getElementById('configNotice').style.display = 'none';
+    buildCategoryTabs();
+    applyFilters();
+  } catch(e) {
+    // fallback: แสดงข้อมูลตัวอย่างถ้า GAS ยังไม่ได้ตั้งค่า
+    if (GAS_URL === 'YOUR_GAS_WEB_APP_URL') {
+      allPrompts = SAMPLE_PROMPTS;
+      buildCategoryTabs();
+      applyFilters();
+      return;
+    }
+    document.getElementById('errorBox').style.display = 'flex';
+    document.getElementById('errorMsg').textContent = 'โหลดข้อมูลไม่สำเร็จ: ' + e.message;
+    document.getElementById('promptContainer').innerHTML =
+      '<div class="state-box"><span class="icon">⚠️</span><p>ไม่สามารถโหลดได้</p></div>';
   }
 }
-function render(rows){
-  if(!rows.length){document.getElementById('tc').innerHTML='<div class="state-box"><span>🔍</span><p>ไม่พบข้อมูล</p></div>';document.getElementById('rc').textContent='0';return;}
-  let h='<table><thead><tr>'+headers.map(x=>`<th>${x}</th>`).join('')+'</tr></thead><tbody>';
-  rows.forEach(r=>{h+='<tr>'+headers.map(k=>`<td>${r[k]??''}</td>`).join('')+'</tr>';});
-  document.getElementById('tc').innerHTML=h+'</tbody></table>';
-  document.getElementById('rc').textContent=rows.length.toLocaleString('th-TH');
+
+// ── สร้าง Category Tabs ──
+function buildCategoryTabs() {
+  const cats = [...new Set(allPrompts.map(p => p[COL_CAT] || '').filter(Boolean))];
+  const el = document.getElementById('filterTabs');
+  // ล้าง tab เก่า (ยกเว้น ทั้งหมด)
+  el.innerHTML = '<button class="tab-btn active" onclick="setCategory(\'ทั้งหมด\', this)">ทั้งหมด</button>';
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.textContent = cat;
+    btn.onclick = () => setCategory(cat, btn);
+    el.appendChild(btn);
+  });
 }
-function f(){const q=document.getElementById('si').value.toLowerCase();render(q?allRows.filter(r=>headers.some(k=>String(r[k]??'').toLowerCase().includes(q))):allRows);}
-load();
+
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let items = allPrompts;
+  if (activeCategory !== 'ทั้งหมด') items = items.filter(p => (p[COL_CAT] || '') === activeCategory);
+  if (q) items = items.filter(p =>
+    [COL_TITLE, COL_CAT, COL_DESC, COL_TAGS].some(k => String(p[k] || '').toLowerCase().includes(q))
+  );
+  renderPrompts(items);
+}
+
+// ── Render การ์ด ──
+function renderPrompts(items) {
+  document.getElementById('promptCount').textContent = items.length;
+  if (!items.length) {
+    document.getElementById('promptContainer').innerHTML =
+      '<div class="state-box"><span class="icon">🔍</span><p>ไม่พบ Prompt ที่ค้นหา</p></div>';
+    return;
+  }
+
+  const html = '<div class="prompt-grid">' + items.map((p, i) => {
+    const title   = p[COL_TITLE]  || 'Prompt';
+    const cat     = p[COL_CAT]    || '';
+    const desc    = p[COL_DESC]   || '';
+    const prompt  = p[COL_PROMPT] || '';
+    const img     = p[COL_IMG]    || '';
+    const tags    = (p[COL_TAGS]  || '').split(',').map(t => t.trim()).filter(Boolean);
+    const preview = prompt.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const imgHtml = img
+      ? `<img class="card-img" src="${img}" alt="${title}" onerror="this.style.display='none'">`
+      : `<div class="card-img-placeholder">🤖</div>`;
+
+    const tagsHtml = tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+
+    return `
+      <div class="prompt-card" onclick="openModal(${i})">
+        <div class="card-header">
+          ${imgHtml}
+          <div class="card-meta">
+            <div class="card-title">${title}</div>
+            <div class="card-tags"><span class="card-tag" style="background:rgba(13,59,140,0.18)">${cat}</span>${tagsHtml}</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-preview">${preview || '(ไม่มีข้อความ)'}</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-hint">👆 กดเพื่อแก้ไขและคัดลอก</span>
+          <button class="card-open-btn">เปิด Prompt</button>
+        </div>
+      </div>`;
+  }).join('') + '</div>';
+
+  document.getElementById('promptContainer').innerHTML = html;
+}
+
+// ── Modal ──
+let currentIndex = -1;
+
+function openModal(idx) {
+  const p = allPrompts[idx];
+  if (!p) return;
+  currentIndex = idx;
+  originalPrompt = p[COL_PROMPT] || '';
+
+  const img   = p[COL_IMG] || '';
+  const title = p[COL_TITLE] || 'Prompt';
+  const cat   = p[COL_CAT]  || '';
+  const desc  = p[COL_DESC] || '';
+
+  // ตั้งค่า header
+  const imgEl = document.getElementById('modalImg');
+  if (img) {
+    imgEl.outerHTML = `<img class="modal-img" id="modalImg" src="${img}" alt="${title}">`;
+  } else {
+    imgEl.textContent = '🤖';
+  }
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalSub').textContent   = cat;
+
+  // คำอธิบาย
+  const descEl = document.getElementById('modalDesc');
+  if (desc) { descEl.textContent = desc; descEl.style.display = 'block'; }
+  else        { descEl.style.display = 'none'; }
+
+  document.getElementById('promptText').value = originalPrompt;
+
+  // reset ปุ่ม copy
+  const copyBtn = document.getElementById('copyBtn');
+  copyBtn.textContent = '📋 คัดลอก Prompt';
+  copyBtn.classList.remove('copied');
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // focus textarea (หลัง animation)
+  setTimeout(() => document.getElementById('promptText').focus(), 200);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ปิดด้วย ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+function resetPrompt() {
+  document.getElementById('promptText').value = originalPrompt;
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = '📋 คัดลอก Prompt';
+  btn.classList.remove('copied');
+}
+
+async function copyPrompt() {
+  const text = document.getElementById('promptText').value;
+  const btn  = document.getElementById('copyBtn');
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = '✅ คัดลอกแล้ว!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 คัดลอก Prompt';
+      btn.classList.remove('copied');
+    }, 2500);
+  } catch {
+    // fallback สำหรับ browser เก่า
+    const ta = document.getElementById('promptText');
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    btn.textContent = '✅ คัดลอกแล้ว!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 คัดลอก Prompt';
+      btn.classList.remove('copied');
+    }, 2500);
+  }
+}
+
+loadData();
 </script>
 </body>
 </html>
