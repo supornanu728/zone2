@@ -337,13 +337,17 @@ function toDriveImg(url) {
   if (!url) return '';
   const s = String(url).trim();
   if (!s) return '';
+  // lh3 thumbnail — ใช้ได้โดยตรง
   if (s.includes('lh3.googleusercontent.com')) return s;
+  // ไม่ใช่ Google Drive — ใช้ URL ตรงๆ
   if (!s.includes('drive.google.com') && !s.includes('docs.google.com')) return s;
+  // ดึง FILE_ID
   let id = '';
   let m = s.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (m) { id = m[1]; }
   if (!id) { m = s.match(/[?&]id=([a-zA-Z0-9_-]+)/); if (m) id = m[1]; }
-  return id ? `https://drive.google.com/uc?export=view&id=${id}` : s;
+  // ใช้ /thumbnail แทน /uc?export=view เพื่อหลีกเลี่ยง CORS block
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w600` : s;
 }
 
 function toDriveView(url) {
